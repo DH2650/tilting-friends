@@ -4,6 +4,8 @@
 TagManager:
   serializedVersion: 3
   tags:
+  - Player1
+  - Player2
   - Hole
   layers:
   - Default
