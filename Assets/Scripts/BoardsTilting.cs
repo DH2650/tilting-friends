@@ -14,6 +14,9 @@ public class Board: MonoBehaviour
 
     private Rigidbody rb1;
     private Rigidbody rb2;
+    private Rigidbody arrow;
+
+    Quaternion ogArrowRotation;
 
     void Start()
     {
@@ -24,6 +27,11 @@ public class Board: MonoBehaviour
             rb1 = player1.GetComponent<Rigidbody>();
         if (player2 != null)
             rb2 = player2.GetComponent<Rigidbody>();
+
+        GameObject arrowObj = GameObject.FindGameObjectWithTag("Arrow");
+        if (arrowObj != null)
+            arrow = arrowObj.GetComponent<Rigidbody>();
+            ogArrowRotation = arrow.transform.rotation;
     }
 
     void Update()
@@ -60,5 +68,6 @@ public class Board: MonoBehaviour
 
         // Rotate
         transform.rotation = Quaternion.Slerp(transform.rotation, bRotation, Time.deltaTime*smooth);
+        arrow.transform.rotation = ogArrowRotation * transform.rotation;
     }
 }
