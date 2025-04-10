@@ -830,8 +830,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d7c8c4567f7014af4ae3447ebdeebc47, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  smooth: 5
+  smooth: 1
   rotateAngle: 30
+  platformRadius: 10
+  tiltCutoffY: -7
   debug: {fileID: 1887298640}
   board: {fileID: 667111551}
 --- !u!1 &744464996
