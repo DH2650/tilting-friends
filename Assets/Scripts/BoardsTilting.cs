@@ -15,9 +15,9 @@ public class Board: MonoBehaviour
     private Rigidbody rb1;
     private Rigidbody rb2;
 
-    // Start is called before the first frame update
     void Start()
     {
+        // Get players with their rigid bodies
         GameObject player1 = GameObject.FindGameObjectWithTag("Player1");
         GameObject player2 = GameObject.FindGameObjectWithTag("Player2");
         if (player1 != null)
@@ -26,14 +26,12 @@ public class Board: MonoBehaviour
             rb2 = player2.GetComponent<Rigidbody>();
     }
 
-    // Update is called once per frame
     void Update()
     {
-        // gets input from user
-        float xRotation = Input.GetAxis("Horizontal") * rotateAngle;
-        float zRotation = Input.GetAxis("Vertical") * rotateAngle;
-
+        // Get positions of both players
         Vector3 norm = rb1.transform.position + rb2.transform.position;
+
+        // Normalize x according to max distance from the centre
         if (norm.x > max) {
             norm.x = max;
         }
@@ -42,7 +40,7 @@ public class Board: MonoBehaviour
         }
         norm.x /= max;
 
-
+        // Normalize z according to max distance from the centre
         if (norm.z > max) {
             norm.z = max;
         }
@@ -51,14 +49,16 @@ public class Board: MonoBehaviour
         }
         norm.z /= max;
 
+        // Translate to direction with rotateAngle
         Vector3 direction = norm * rotateAngle;
-//         body.AddForceAtPosition(direction.normalized, transform.position);
 
-        debug.debugText.text = $"P1 Pos: {rb1.transform.position}\nP2 Pos: {rb2.transform.position}\nNorm: {norm} Dir: {direction}";
+        // Output debug info
+        debug.debugText.text = $"P1 Pos: {rb1.transform.position}\nP2 Pos: {rb2.transform.position}\nNorm: {norm}\nDir: {direction}";
 
-//         // convert the rotation angles into quarternions.
+        // Convert the rotation angles into quaternions
         Quaternion bRotation = Quaternion.Euler(direction.z, 0.0f, -direction.x);
-// //         // rotate
+
+        // Rotate
         transform.rotation = Quaternion.Slerp(transform.rotation, bRotation, Time.deltaTime*smooth);
     }
 }
