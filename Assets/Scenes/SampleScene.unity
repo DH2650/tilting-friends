@@ -695,6 +695,7 @@ GameObject:
   - component: {fileID: 667111547}
   - component: {fileID: 667111551}
   - component: {fileID: 667111552}
+  - component: {fileID: 667111553}
   m_Layer: 3
   m_Name: Main Platform
   m_TagString: Untagged
@@ -732,7 +733,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -833,7 +834,30 @@ MonoBehaviour:
   smooth: 5
   rotateAngle: 30
   debug: {fileID: 1887298640}
+  p1Touch: {fileID: 744465000}
+  p2Touch: {fileID: 1998972079}
   board: {fileID: 667111551}
+--- !u!65 &667111553
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 667111545}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &744464996
 GameObject:
   m_ObjectHideFlags: 0
@@ -845,6 +869,7 @@ GameObject:
   - component: {fileID: 744464997}
   - component: {fileID: 744464999}
   - component: {fileID: 744464998}
+  - component: {fileID: 744465000}
   m_Layer: 0
   m_Name: Player1
   m_TagString: Player1
@@ -916,6 +941,19 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &744465000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 744464996}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d9b543503312cc749886eae5dbf0a43d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  touchBoard: 0
 --- !u!1 &832575517
 GameObject:
   m_ObjectHideFlags: 0
@@ -1542,6 +1580,7 @@ GameObject:
   - component: {fileID: 1998972076}
   - component: {fileID: 1998972078}
   - component: {fileID: 1998972077}
+  - component: {fileID: 1998972079}
   m_Layer: 0
   m_Name: Player2
   m_TagString: Player2
@@ -1613,6 +1652,19 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &1998972079
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1998972073}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d9b543503312cc749886eae5dbf0a43d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  touchBoard: 0
 --- !u!4 &2033270695 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 3f3434e810f3ad24da8c5ded39f22102, type: 3}
