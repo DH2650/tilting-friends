@@ -7,10 +7,11 @@ public class Board: MonoBehaviour
 {
     public float smooth = 5.0f;
     public float rotateAngle = 30.0f;
+    public float platformRadius = 10;
+    public float tiltCutoffY = -8;
     [SerializeField] DebugOverlay debug;
     [SerializeField] Rigidbody board;
 
-    private float max = 10;
 
     private Rigidbody rb1;
     private Rigidbody rb2;
@@ -37,25 +38,30 @@ public class Board: MonoBehaviour
     void Update()
     {
         // Get positions of both players
-        Vector3 norm = rb1.transform.position + rb2.transform.position;
+        Vector3 norm = Vector3.zero;
+        if (rb1.transform.position.y > tiltCutoffY)
+            norm = rb1.transform.position;
 
-        // Normalize x according to max distance from the centre
-        if (norm.x > max) {
-            norm.x = max;
-        }
-        else if (norm.x < -max) {
-            norm.x = -max;
-        }
-        norm.x /= max;
+        if (rb2.transform.position.y > tiltCutoffY)
+            norm = norm + rb2.transform.position;
 
-        // Normalize z according to max distance from the centre
-        if (norm.z > max) {
-            norm.z = max;
+        // Normalize x according to platformRadius distance from the centre
+        if (norm.x > platformRadius) {
+            norm.x = platformRadius;
         }
-        else if (norm.z < -max) {
-            norm.z = -max;
+        else if (norm.x < -platformRadius) {
+            norm.x = -platformRadius;
         }
-        norm.z /= max;
+        norm.x /= platformRadius;
+
+        // Normalize z according to platformRadius distance from the centre
+        if (norm.z > platformRadius) {
+            norm.z = platformRadius;
+        }
+        else if (norm.z < -platformRadius) {
+            norm.z = -platformRadius;
+        }
+        norm.z /= platformRadius;
 
         // Translate to direction with rotateAngle
         Vector3 direction = norm * rotateAngle;
