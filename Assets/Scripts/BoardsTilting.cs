@@ -33,7 +33,7 @@ public class Board: MonoBehaviour
         float xRotation = Input.GetAxis("Horizontal") * rotateAngle;
         float zRotation = Input.GetAxis("Vertical") * rotateAngle;
 
-        Vector3 norm = rb1.transform.position;
+        Vector3 norm = rb1.transform.position + rb2.transform.position;
         if (norm.x > max) {
             norm.x = max;
         }
@@ -54,7 +54,7 @@ public class Board: MonoBehaviour
         Vector3 direction = norm * rotateAngle;
 //         body.AddForceAtPosition(direction.normalized, transform.position);
 
-        debug.debugText.text = $"xRot: {xRotation}\nzRot: {zRotation}\nP1 Pos: {rb1.transform.position} Norm: {norm} Dir: {direction}";
+        debug.debugText.text = $"P1 Pos: {rb1.transform.position}\nP2 Pos: {rb2.transform.position}\nNorm: {norm} Dir: {direction}";
 
 //         // convert the rotation angles into quarternions.
         Quaternion bRotation = Quaternion.Euler(direction.z, 0.0f, -direction.x);
