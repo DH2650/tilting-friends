@@ -4,7 +4,8 @@ public class HoleSpawner : MonoBehaviour
 {
     [Header("Assign these in Inspector")]
     public GameObject holePrefab;      // Your hole prefab
-    public GameObject board;           // The board GameObject
+    public GameObject board1;           // The board GameObject
+    public GameObject board2;
 
     [Header("Hole Spawn Area")]
     public Vector2 spawnAreaMin = new Vector2(-4f, -4f); // Min x/z on board
@@ -12,12 +13,13 @@ public class HoleSpawner : MonoBehaviour
 
     void Start()
     {
-        SpawnHole();
+        SpawnHole(board1);
+        SpawnHole(board2);
     }
 
-    void SpawnHole()
+    public void SpawnHole(GameObject board)
     {
-        if (holePrefab == null || board == null)
+        if (holePrefab == null || board1 == null || board2 == null)
         {
             Debug.LogError("HolePrefab or Board is not assigned!");
             return;
@@ -33,7 +35,6 @@ public class HoleSpawner : MonoBehaviour
         hole.transform.localPosition = spawnPosition;
         hole.transform.localRotation = Quaternion.Euler(90f,0f,0f);
         
-
         Debug.Log("Hole spawned at local position: " + spawnPosition);
     }
 }
