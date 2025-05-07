@@ -78,103 +78,108 @@ public class GameNetworkManager : MonoBehaviour
             // CRITICAL: The following Unity API calls (Instantiate, Add to Dictionary)
             // MUST execute on the main thread.
             Debug.Log("Try connect");
-            try
-            {
-                // Attempt to get data without custom class deserialization.
-                // This assumes the server sends a JSON object as the first (or only) argument.
-                // response.GetValue<JToken>() might get the first JToken in the response payload.
-                string controllerId = GetControllerId(response.ToString());
 
+            MainThread.wkr.AddJob(() => {
+                try
+                {
+                    // Attempt to get data without custom class deserialization.
+                    // This assumes the server sends a JSON object as the first (or only) argument.
+                    // response.GetValue<JToken>() might get the first JToken in the response payload.
+                    string controllerId = GetControllerId(response.ToString());
 
+                    if (string.IsNullOrEmpty(controllerId))
+                    {
+                        Debug.LogError("Received invalid or null controllerId for playerJoined.");
+                        // Consider how your specific library handles response.ToString() for logging
+                        Debug.Log($"controllerId not found: {controllerId}");
+                        return;
+                    }
 
-//                 if (string.IsNullOrEmpty(controllerId))
-//                 {
-//                     Debug.LogError("Received invalid or null playerId for controllerConnected.");
-//                     // Consider how your specific library handles response.ToString() for logging
-//                     Debug.Log($"Raw response: {dataToken.GetType()}");
-//                     return;
-//                 }
-//
-//                 Debug.Log("Controller connected (player joined): " + controllerId);
-//                 if (!players.ContainsKey(controllerId) && playerPrefab != null)
-//                 {
-//                     GameObject newPlayer = Instantiate(playerPrefab, Vector3.zero, Quaternion.identity);
-//                     // newPlayer.name = "Player_" + controllerId; // Example: set name for easier debugging
-//                     // Example: PlayerScript ps = newPlayer.GetComponent<PlayerScript>();
-//                     // if (ps != null) ps.Initialize(controllerId);
-//                     players.Add(controllerId, newPlayer);
-//                     Debug.Log("Spawned player: " + controllerId);
-//                 }
-            }
-            catch (System.Exception ex)
-            {
-                Debug.LogError($"Error processing controllerConnected event: {ex.Message}. Ensure this runs on the main thread if using Unity API.");
-                Debug.Log($"Raw response: {response.ToString()}");
-            }
+                    Debug.Log("Controller connected (player joined): " + controllerId);
+                    if (!players.ContainsKey(controllerId) && playerPrefab != null)
+                    {
+                        GameObject newPlayer = Instantiate(playerPrefab, Vector3.zero, Quaternion.identity);
+                        // newPlayer.name = "Player_" + controllerId; // Example: set name for easier debugging
+                        // Example: PlayerScript ps = newPlayer.GetComponent<PlayerScript>();
+                        // if (ps != null) ps.Initialize(controllerId);
+                        players.Add(controllerId, newPlayer);
+                        Debug.Log("Spawned player: " + controllerId);
+                    }
+                }
+                catch (System.Exception ex)
+                {
+                    Debug.LogError($"Error processing playerJoined event: {ex.Message}. Ensure this runs on the main thread if using Unity API.");
+                    Debug.Log($"Error processing controllerConnected event: {ex.Message}");
+                }
+            });
         });
 
         socket.On("disconnect", (response) =>
         {
             // CRITICAL: The following Unity API calls (Destroy, Remove from Dictionary)
             // MUST execute on the main thread.
-            try
-            {
-                JToken dataToken = response.GetValue<JToken>();
-                string controllerId = dataToken?.Value<string>("controllerId"); // Match key from server
-
-                if (string.IsNullOrEmpty(controllerId))
+            MainThread.wkr.AddJob(() => {
+                try
                 {
-                    Debug.LogError("Received invalid or null playerId for controllerDisconnected.");
+                    JToken dataToken = response.GetValue<JToken>();
+                    string controllerId = dataToken?.Value<string>("controllerId"); // Match key from server
+
+                    if (string.IsNullOrEmpty(controllerId))
+                    {
+                        Debug.LogError("Received invalid or null playerId for controllerDisconnected.");
+                        Debug.Log($"Raw response: {response.ToString()}");
+                        return;
+                    }
+
+                    Debug.Log("Controller disconnected (player left): " + controllerId);
+                    if (players.TryGetValue(controllerId, out GameObject playerObject))
+                    {
+                        Destroy(playerObject);
+                        players.Remove(controllerId);
+                        Debug.Log("Destroyed player: " + controllerId);
+                    }
+                }
+                catch (System.Exception ex)
+                {
+                    Debug.LogError($"Error processing controllerDisconnected event: {ex.Message}. Ensure this runs on the main thread if using Unity API.");
                     Debug.Log($"Raw response: {response.ToString()}");
-                    return;
                 }
-
-                Debug.Log("Controller disconnected (player left): " + controllerId);
-                if (players.TryGetValue(controllerId, out GameObject playerObject))
-                {
-                    Destroy(playerObject);
-                    players.Remove(controllerId);
-                    Debug.Log("Destroyed player: " + controllerId);
-                }
-            }
-            catch (System.Exception ex)
-            {
-                Debug.LogError($"Error processing controllerDisconnected event: {ex.Message}. Ensure this runs on the main thread if using Unity API.");
-                Debug.Log($"Raw response: {response.ToString()}");
-            }
+            });
         });
 
         socket.On("inputFromController", (response) =>
         {
             // CRITICAL: Any interaction with player GameObjects MUST execute on the main thread.
-            try
-            {
-                JToken dataToken = response.GetValue<JToken>();
-                string controllerId = dataToken?.Value<string>("controllerId"); // Match key from server
-                // Assuming 'input' is also part of the same JSON object.
-                // If 'input' is a complex object itself, dataToken["input"] would be another JToken.
-                // If 'input' is a simple string:
-                string rawInput = dataToken?.Value<string>("input"); // Match key from server
-
-                if (string.IsNullOrEmpty(controllerId))
+            MainThread.wkr.AddJob(() => {
+                try
                 {
-                    Debug.LogError("Received invalid or null playerId for inputFromController.");
+                    JToken dataToken = response.GetValue<JToken>();
+                    string controllerId = dataToken?.Value<string>("controllerId"); // Match key from server
+                    // Assuming 'input' is also part of the same JSON object.
+                    // If 'input' is a complex object itself, dataToken["input"] would be another JToken.
+                    // If 'input' is a simple string:
+                    string rawInput = dataToken?.Value<string>("input"); // Match key from server
+
+                    if (string.IsNullOrEmpty(controllerId))
+                    {
+                        Debug.LogError("Received invalid or null playerId for inputFromController.");
+                        Debug.Log($"Raw response: {response.ToString()}");
+                        return;
+                    }
+                    // rawInput might be null if not present, handle accordingly.
+
+                    if (players.TryGetValue(controllerId, out GameObject playerObject))
+                    {
+                        Debug.Log($"Received input '{rawInput ?? "null"}' for player '{controllerId}'");
+                        // Example: playerObject.GetComponent<PlayerMovementController>()?.HandleInput(rawInput);
+                    }
+                }
+                catch (System.Exception ex)
+                {
+                    Debug.LogError($"Error processing inputFromController event: {ex.Message}. Ensure this runs on the main thread if using Unity API.");
                     Debug.Log($"Raw response: {response.ToString()}");
-                    return;
                 }
-                // rawInput might be null if not present, handle accordingly.
-
-                if (players.TryGetValue(controllerId, out GameObject playerObject))
-                {
-                    Debug.Log($"Received input '{rawInput ?? "null"}' for player '{controllerId}'");
-                    // Example: playerObject.GetComponent<PlayerMovementController>()?.HandleInput(rawInput);
-                }
-            }
-            catch (System.Exception ex)
-            {
-                Debug.LogError($"Error processing inputFromController event: {ex.Message}. Ensure this runs on the main thread if using Unity API.");
-                Debug.Log($"Raw response: {response.ToString()}");
-            }
+            });
         });
 
         Debug.Log("Attempting to connect to server at " + serverURL);
