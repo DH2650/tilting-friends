@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Unity Web Controller</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="connectionStatus">Connecting to server...</div>
+<div id="controllerIdDisplay">My Controller ID: N/A</div>
+<div id="playerIdDisplay">Assigned Player ID: N/A</div>
+<div id="roomCodeInput" style="display: none;">
+    <input type="text" id="playerIdInput" placeholder="Enter Player ID/Name">
+    <button id="joinGameButton">Join Game</button>
+</div>
+
+<div id="controls" style="display: none;">
+    <button id="buttonUp">Up</button>
+    <button id="buttonDown">Down</button>
+    <button id="buttonLeft">Left</button>
+    <button id="buttonRight">Right</button>
+    <button id="buttonActionA">Action A</button>
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="controller.js"></script>
+</body>
+</html>
