@@ -12,7 +12,7 @@ let unitySocket = null; // To store the Unity game's socket connection
 let playerControllers = {}; // To store player controller sockets, mapping controller ID to player ID
 
 // Serve the HTML controller page (you'll create this later)
-app.use(express.static('public')); // Create a 'public' folder for your controller.html
+app.use(express.static('../frontend')); // Create a 'public' folder for your controller.html
 
 io.on('connection', (socket) => {
     console.log('New client connected:', socket.id);
@@ -46,6 +46,7 @@ io.on('connection', (socket) => {
         // data should contain { playerId: "...", input: "..." }
         // Or, if using socket.id as controllerId directly: { input: "..." }
         const playerId = playerControllers[socket.id];
+        console.log('Receive input');
         if (unitySocket && playerId) {
             console.log(`Input from controller ${socket.id} (Player ${playerId}):`, data.input);
             unitySocket.emit('playerInput', { playerId: playerId, input: data.input });

@@ -72,7 +72,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // Add more for touchstart/touchend if needed for mobile specifically
 
     function sendInput(inputType) {
+        console.log('Sending Input');
         if (socket.connected && assignedPlayerId) {
+            console.log('Inside');
             socket.emit('controllerInput', { input: inputType });
             // Optionally, could also send { playerId: assignedPlayerId, input: inputType } if server needs it explicitly here
         }
