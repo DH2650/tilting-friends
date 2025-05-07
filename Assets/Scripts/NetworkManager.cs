@@ -84,25 +84,25 @@ public class GameNetworkManager : MonoBehaviour
                 // This assumes the server sends a JSON object as the first (or only) argument.
                 // response.GetValue<JToken>() might get the first JToken in the response payload.
                 JToken dataToken = response.GetValue<JToken>(); // Or response.GetValue(0) if your lib supports index
-                string playerId = dataToken?.Value<string>("controllerId"); // Match key from server
+                string controllerId = dataToken?.Value<string>("controllerId"); // Match key from server
 
-                if (string.IsNullOrEmpty(playerId))
+                if (string.IsNullOrEmpty(controllerId))
                 {
                     Debug.LogError("Received invalid or null playerId for controllerConnected.");
                     // Consider how your specific library handles response.ToString() for logging
-                    Debug.Log($"Raw response: {response.ToString()}");
+                    Debug.Log($"Raw response: {dataToken.GetType()}");
                     return;
                 }
 
-                Debug.Log("Controller connected (player joined): " + playerId);
-                if (!players.ContainsKey(playerId) && playerPrefab != null)
+                Debug.Log("Controller connected (player joined): " + controllerId);
+                if (!players.ContainsKey(controllerId) && playerPrefab != null)
                 {
                     GameObject newPlayer = Instantiate(playerPrefab, Vector3.zero, Quaternion.identity);
-                    // newPlayer.name = "Player_" + playerId; // Example: set name for easier debugging
+                    // newPlayer.name = "Player_" + controllerId; // Example: set name for easier debugging
                     // Example: PlayerScript ps = newPlayer.GetComponent<PlayerScript>();
-                    // if (ps != null) ps.Initialize(playerId);
-                    players.Add(playerId, newPlayer);
-                    Debug.Log("Spawned player: " + playerId);
+                    // if (ps != null) ps.Initialize(controllerId);
+                    players.Add(controllerId, newPlayer);
+                    Debug.Log("Spawned player: " + controllerId);
                 }
             }
             catch (System.Exception ex)
@@ -119,21 +119,21 @@ public class GameNetworkManager : MonoBehaviour
             try
             {
                 JToken dataToken = response.GetValue<JToken>();
-                string playerId = dataToken?.Value<string>("controllerId"); // Match key from server
+                string controllerId = dataToken?.Value<string>("controllerId"); // Match key from server
 
-                if (string.IsNullOrEmpty(playerId))
+                if (string.IsNullOrEmpty(controllerId))
                 {
                     Debug.LogError("Received invalid or null playerId for controllerDisconnected.");
                     Debug.Log($"Raw response: {response.ToString()}");
                     return;
                 }
 
-                Debug.Log("Controller disconnected (player left): " + playerId);
-                if (players.TryGetValue(playerId, out GameObject playerObject))
+                Debug.Log("Controller disconnected (player left): " + controllerId);
+                if (players.TryGetValue(controllerId, out GameObject playerObject))
                 {
                     Destroy(playerObject);
-                    players.Remove(playerId);
-                    Debug.Log("Destroyed player: " + playerId);
+                    players.Remove(controllerId);
+                    Debug.Log("Destroyed player: " + controllerId);
                 }
             }
             catch (System.Exception ex)
@@ -149,13 +149,13 @@ public class GameNetworkManager : MonoBehaviour
             try
             {
                 JToken dataToken = response.GetValue<JToken>();
-                string playerId = dataToken?.Value<string>("controllerId"); // Match key from server
+                string controllerId = dataToken?.Value<string>("controllerId"); // Match key from server
                 // Assuming 'input' is also part of the same JSON object.
                 // If 'input' is a complex object itself, dataToken["input"] would be another JToken.
                 // If 'input' is a simple string:
                 string rawInput = dataToken?.Value<string>("input"); // Match key from server
 
-                if (string.IsNullOrEmpty(playerId))
+                if (string.IsNullOrEmpty(controllerId))
                 {
                     Debug.LogError("Received invalid or null playerId for inputFromController.");
                     Debug.Log($"Raw response: {response.ToString()}");
@@ -163,9 +163,9 @@ public class GameNetworkManager : MonoBehaviour
                 }
                 // rawInput might be null if not present, handle accordingly.
 
-                if (players.TryGetValue(playerId, out GameObject playerObject))
+                if (players.TryGetValue(controllerId, out GameObject playerObject))
                 {
-                    Debug.Log($"Received input '{rawInput ?? "null"}' for player '{playerId}'");
+                    Debug.Log($"Received input '{rawInput ?? "null"}' for player '{controllerId}'");
                     // Example: playerObject.GetComponent<PlayerMovementController>()?.HandleInput(rawInput);
                 }
             }
