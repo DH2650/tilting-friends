@@ -83,16 +83,9 @@ public class GameNetworkManager : MonoBehaviour
                 // Attempt to get data without custom class deserialization.
                 // This assumes the server sends a JSON object as the first (or only) argument.
                 // response.GetValue<JToken>() might get the first JToken in the response payload.
-//                 string controllerId = GetControllerId(response);
+                string controllerId = GetControllerId(response.ToString());
 
-                string find = "controllerId";
 
-                string json = response.ToString();
-//                 Debug.Log($"JSON string: {json}");
-                int start = json.IndexOf(find);
-//                 Debug.Log($"Start Index: {start}");
-                string controllerId = json.Substring(start + find.Length + 3, 20);
-                Debug.Log($"controllerId: {controllerId}");
 
 //                 if (string.IsNullOrEmpty(controllerId))
 //                 {
@@ -201,14 +194,12 @@ public class GameNetworkManager : MonoBehaviour
         }
     }
 
-    string GetControllerId(string response)
+    string GetControllerId(string json)
     {
         string find = "controllerId";
-
-        string json = response.ToString();
-        Debug.Log($"JSON string: {json}");
+//         Debug.Log($"JSON string: {json}");
         int start = json.IndexOf(find);
-        Debug.Log($"Start Index: {start}");
+//         Debug.Log($"Start Index: {start}");
         string controllerId = json.Substring(start + find.Length + 3, 20);
         Debug.Log($"controllerId: {controllerId}");
 
