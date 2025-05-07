@@ -52,7 +52,7 @@ io.on('connection', (socket) => {
         console.log('Receive input');
         if (unitySocket && playerId) {
             console.log(`Input from controller ${socket.id} (Player ${playerId}):`, data.input);
-            unitySocket.emit('inputFromController', { playerId: playerId, input: data.input });
+            unitySocket.emit('controllerInput', { controllerId: socket.id, input: data.input });
         }
     });
 

@@ -83,7 +83,7 @@ public class GameNetworkManager : MonoBehaviour
                     // Attempt to get data without custom class deserialization.
                     // This assumes the server sends a JSON object as the first (or only) argument.
                     // response.GetValue<JToken>() might get the first JToken in the response payload.
-                    string controllerId = GetControllerId(response.ToString());
+                    string controllerId = GetField(response.ToString(), "controllerId");
 
                     if (string.IsNullOrEmpty(controllerId))
                     {
@@ -119,13 +119,12 @@ public class GameNetworkManager : MonoBehaviour
             MainThread.wkr.AddJob(() => {
                 try
                 {
-                    JToken dataToken = response.GetValue<JToken>();
-                    string controllerId = dataToken?.Value<string>("controllerId"); // Match key from server
+                    string controllerId = GetField(response.ToString(), "controllerId");
 
                     if (string.IsNullOrEmpty(controllerId))
                     {
-                        Debug.LogError("Received invalid or null playerId for controllerDisconnected.");
-                        Debug.Log($"Raw response: {response.ToString()}");
+                        Debug.LogError("Received invalid or null playerId for disconnect.");
+                        Debug.Log($"No controllerId: {response.ToString()}");
                         return;
                     }
 
@@ -140,42 +139,40 @@ public class GameNetworkManager : MonoBehaviour
                 catch (System.Exception ex)
                 {
                     Debug.LogError($"Error processing controllerDisconnected event: {ex.Message}. Ensure this runs on the main thread if using Unity API.");
-                    Debug.Log($"Raw response: {response.ToString()}");
+                    Debug.Log($"Error processing controllerDisconnected event: {ex.Message}");
                 }
             });
         });
 
-        socket.On("inputFromController", (response) =>
+        socket.On("controllerInput", (response) =>
         {
             // CRITICAL: Any interaction with player GameObjects MUST execute on the main thread.
             MainThread.wkr.AddJob(() => {
                 try
                 {
-                    JToken dataToken = response.GetValue<JToken>();
-                    string controllerId = dataToken?.Value<string>("controllerId"); // Match key from server
-                    // Assuming 'input' is also part of the same JSON object.
-                    // If 'input' is a complex object itself, dataToken["input"] would be another JToken.
-                    // If 'input' is a simple string:
-                    string rawInput = dataToken?.Value<string>("input"); // Match key from server
+                    string controllerId = GetField(response.ToString(), "controllerId");
+                    string rawInput = GetInput(response.ToString(), "input");
 
                     if (string.IsNullOrEmpty(controllerId))
                     {
                         Debug.LogError("Received invalid or null playerId for inputFromController.");
-                        Debug.Log($"Raw response: {response.ToString()}");
+                        Debug.Log($"No controllerId: {response.ToString()}");
                         return;
                     }
                     // rawInput might be null if not present, handle accordingly.
 
-                    if (players.TryGetValue(controllerId, out GameObject playerObject))
+                    if (players.ContainsKey(controllerId))
                     {
-                        Debug.Log($"Received input '{rawInput ?? "null"}' for player '{controllerId}'");
-                        // Example: playerObject.GetComponent<PlayerMovementController>()?.HandleInput(rawInput);
+                        Debug.Log($"Received input '{response.ToString() ?? "null"}' for player '{controllerId}'");
+
+                        GameObject playerObject = players[controllerId];
+                        playerObject.GetComponent<NetworkPlayerMovement>()?.ProcessInput(rawInput);
                     }
                 }
                 catch (System.Exception ex)
                 {
-                    Debug.LogError($"Error processing inputFromController event: {ex.Message}. Ensure this runs on the main thread if using Unity API.");
-                    Debug.Log($"Raw response: {response.ToString()}");
+                    Debug.LogError($"Error processing controllerInput event: {ex.Message}. Ensure this runs on the main thread if using Unity API.");
+                    Debug.Log($"Error processing controllerInput event: {ex.Message}");
                 }
             });
         });
@@ -197,14 +194,27 @@ public class GameNetworkManager : MonoBehaviour
         }
     }
 
-    string GetControllerId(string json)
+    string GetField(string json, string find)
     {
-        string find = "controllerId";
 //         Debug.Log($"JSON string: {json}");
         int start = json.IndexOf(find);
 //         Debug.Log($"Start Index: {start}");
         string controllerId = json.Substring(start + find.Length + 3, 20);
         Debug.Log($"controllerId: {controllerId}");
+
+        return controllerId;
+    }
+
+    string GetInput(string json, string find)
+    {
+//         Debug.Log($"JSON string: {json}");
+        int start = json.IndexOf(find);
+        Debug.Log($"Start Index: {start + find.Length + 3}");
+        int end = json.LastIndexOf('"');
+        Debug.Log($"End Index: {end}");
+        Debug.Log($"Diff: {end - (start + find.Length + 3)}");
+        string controllerId = json.Substring(start + find.Length + 3, end - (start + find.Length + 3));
+        Debug.Log($"input: {controllerId}");
 
         return controllerId;
     }
