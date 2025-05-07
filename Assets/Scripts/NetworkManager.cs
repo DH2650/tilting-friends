@@ -17,8 +17,6 @@ public class GameNetworkManager : MonoBehaviour
     public Dictionary<string, GameObject> players = new Dictionary<string, GameObject>();
     public GameObject playerPrefab; // Assign your player prefab in the Inspector
 
-    // No more _mainThreadActions queue
-
     void Awake()
     {
         if (Instance == null)
@@ -98,7 +96,7 @@ public class GameNetworkManager : MonoBehaviour
                     Debug.Log("Controller connected (player joined): " + controllerId);
                     if (!players.ContainsKey(controllerId) && playerPrefab != null)
                     {
-                        GameObject newPlayer = Instantiate(playerPrefab, Vector3.zero, Quaternion.identity);
+                        GameObject newPlayer = Instantiate(playerPrefab, playerPrefab.transform.position, Quaternion.identity);
                         // newPlayer.name = "Player_" + controllerId; // Example: set name for easier debugging
                         // Example: PlayerScript ps = newPlayer.GetComponent<PlayerScript>();
                         // if (ps != null) ps.Initialize(controllerId);
