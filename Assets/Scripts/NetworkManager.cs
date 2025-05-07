@@ -83,27 +83,35 @@ public class GameNetworkManager : MonoBehaviour
                 // Attempt to get data without custom class deserialization.
                 // This assumes the server sends a JSON object as the first (or only) argument.
                 // response.GetValue<JToken>() might get the first JToken in the response payload.
-                JToken dataToken = response.GetValue<JToken>(); // Or response.GetValue(0) if your lib supports index
-                string controllerId = dataToken?.Value<string>("controllerId"); // Match key from server
+//                 string controllerId = GetControllerId(response);
 
-                if (string.IsNullOrEmpty(controllerId))
-                {
-                    Debug.LogError("Received invalid or null playerId for controllerConnected.");
-                    // Consider how your specific library handles response.ToString() for logging
-                    Debug.Log($"Raw response: {dataToken.GetType()}");
-                    return;
-                }
+                string find = "controllerId";
 
-                Debug.Log("Controller connected (player joined): " + controllerId);
-                if (!players.ContainsKey(controllerId) && playerPrefab != null)
-                {
-                    GameObject newPlayer = Instantiate(playerPrefab, Vector3.zero, Quaternion.identity);
-                    // newPlayer.name = "Player_" + controllerId; // Example: set name for easier debugging
-                    // Example: PlayerScript ps = newPlayer.GetComponent<PlayerScript>();
-                    // if (ps != null) ps.Initialize(controllerId);
-                    players.Add(controllerId, newPlayer);
-                    Debug.Log("Spawned player: " + controllerId);
-                }
+                string json = response.ToString();
+//                 Debug.Log($"JSON string: {json}");
+                int start = json.IndexOf(find);
+//                 Debug.Log($"Start Index: {start}");
+                string controllerId = json.Substring(start + find.Length + 3, 20);
+                Debug.Log($"controllerId: {controllerId}");
+
+//                 if (string.IsNullOrEmpty(controllerId))
+//                 {
+//                     Debug.LogError("Received invalid or null playerId for controllerConnected.");
+//                     // Consider how your specific library handles response.ToString() for logging
+//                     Debug.Log($"Raw response: {dataToken.GetType()}");
+//                     return;
+//                 }
+//
+//                 Debug.Log("Controller connected (player joined): " + controllerId);
+//                 if (!players.ContainsKey(controllerId) && playerPrefab != null)
+//                 {
+//                     GameObject newPlayer = Instantiate(playerPrefab, Vector3.zero, Quaternion.identity);
+//                     // newPlayer.name = "Player_" + controllerId; // Example: set name for easier debugging
+//                     // Example: PlayerScript ps = newPlayer.GetComponent<PlayerScript>();
+//                     // if (ps != null) ps.Initialize(controllerId);
+//                     players.Add(controllerId, newPlayer);
+//                     Debug.Log("Spawned player: " + controllerId);
+//                 }
             }
             catch (System.Exception ex)
             {
@@ -191,5 +199,19 @@ public class GameNetworkManager : MonoBehaviour
             // Some libraries might require explicit disposal if they implement IDisposable
             // (socket as System.IDisposable)?.Dispose();
         }
+    }
+
+    string GetControllerId(string response)
+    {
+        string find = "controllerId";
+
+        string json = response.ToString();
+        Debug.Log($"JSON string: {json}");
+        int start = json.IndexOf(find);
+        Debug.Log($"Start Index: {start}");
+        string controllerId = json.Substring(start + find.Length + 3, 20);
+        Debug.Log($"controllerId: {controllerId}");
+
+        return controllerId;
     }
 }
