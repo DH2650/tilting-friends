@@ -14,4 +14,14 @@ public class SceneController : MonoBehaviour
         Application.Quit();
         Debug.Log("Game is exiting...");
     }
+
+    public void VSQuit()
+    {
+        SceneManager.LoadScene("MainMenu");
+    }
+
+    public void PlayVS()
+    {
+        SceneManager.LoadScene("VSMode");
+    }
 }

@@ -5,7 +5,6 @@ public class BallScript : MonoBehaviour
     private Vector3 startPosition; // Stores the initial position of the ball
     private Transform parentBoard; 
     [SerializeField] HoleSpawner holeSpawner;
-    [SerializeField] VSGameSystem gameSystem;
 
     void Start()
     {

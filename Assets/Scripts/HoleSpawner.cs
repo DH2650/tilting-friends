@@ -5,21 +5,15 @@ public class HoleSpawner : MonoBehaviour
     [Header("Assign these in Inspector")]
     public GameObject holePrefab;      // Your hole prefab
     public GameObject board1;           // The board GameObject
-    public GameObject board2;
 
     [Header("Hole Spawn Area")]
     public Vector2 spawnAreaMin = new Vector2(-4f, -4f); // Min x/z on board
     public Vector2 spawnAreaMax = new Vector2(4f, 4f);   // Max x/z on board
 
-    void Start()
-    {
-        SpawnHole(board1);
-        SpawnHole(board2);
-    }
 
     public void SpawnHole(GameObject board)
     {
-        if (holePrefab == null || board1 == null || board2 == null)
+        if (holePrefab == null || board1 == null)
         {
             Debug.LogError("HolePrefab or Board is not assigned!");
             return;

@@ -30,11 +30,12 @@ public class VSBoard: MonoBehaviour
             rb1 = player.GetComponent<Rigidbody>();
         //if (player2 != null)
             //rb2 = player2.GetComponent<Rigidbody>();
-
+        /*
         GameObject arrowObj = GameObject.FindGameObjectWithTag("Arrow");
         if (arrowObj != null)
             arrow = arrowObj.GetComponent<Rigidbody>();
             ogArrowRotation = arrow.transform.rotation;
+            */
     }
 
     void Update()
@@ -77,6 +78,6 @@ public class VSBoard: MonoBehaviour
 
         // Rotate
         transform.rotation = Quaternion.Slerp(transform.rotation, bRotation, Time.deltaTime*smooth);
-        arrow.transform.rotation = ogArrowRotation * transform.rotation;
+        //arrow.transform.rotation = ogArrowRotation * transform.rotation;
     }
 }

@@ -33,7 +33,7 @@ public class Board: MonoBehaviour
         GameObject arrowObj = GameObject.FindGameObjectWithTag("Arrow");
         if (arrowObj != null)
             arrow = arrowObj.GetComponent<Rigidbody>();
-            ogArrowRotation = arrow.transform.rotation;
+            //ogArrowRotation = arrow.transform.rotation;
     }
 
     void Update()
@@ -75,6 +75,6 @@ public class Board: MonoBehaviour
 
         // Rotate
         transform.rotation = Quaternion.Slerp(transform.rotation, bRotation, Time.deltaTime*smooth);
-        arrow.transform.rotation = ogArrowRotation * transform.rotation;
+        //arrow.transform.rotation = ogArrowRotation * transform.rotation;
     }
 }
