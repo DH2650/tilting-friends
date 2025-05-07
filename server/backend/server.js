@@ -31,10 +31,13 @@ io.on('connection', (socket) => {
         console.log('Controller registered for player:', playerId, 'Socket ID:', socket.id);
         playerControllers[socket.id] = playerId; // Map socket ID to player ID
 
+        console.log("Unity Socket:", unitySocket.id)
         // Notify Unity that a new player (controller) has joined
         if (unitySocket) {
-            unitySocket.emit('playerJoined', { playerId: playerId });
+            console.log("Join player", playerId)
+            unitySocket.emit('playerJoined', { controllerId: socket.id, assignedPlayerId: playerId });
         } else {
+            console.log("Did not join player", playerId)
             socket.emit('error', { message: 'Unity game not connected.' });
         }
 
@@ -49,7 +52,7 @@ io.on('connection', (socket) => {
         console.log('Receive input');
         if (unitySocket && playerId) {
             console.log(`Input from controller ${socket.id} (Player ${playerId}):`, data.input);
-            unitySocket.emit('playerInput', { playerId: playerId, input: data.input });
+            unitySocket.emit('inputFromController', { playerId: playerId, input: data.input });
         }
     });
 

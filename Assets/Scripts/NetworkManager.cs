@@ -73,10 +73,11 @@ public class GameNetworkManager : MonoBehaviour
             Debug.LogError("Socket Error: " + e_string);
         };
 
-        socket.On("controllerConnected", (response) =>
+        socket.On("playerJoined", (response) =>
         {
             // CRITICAL: The following Unity API calls (Instantiate, Add to Dictionary)
             // MUST execute on the main thread.
+            Debug.Log("Try connect");
             try
             {
                 // Attempt to get data without custom class deserialization.
@@ -111,7 +112,7 @@ public class GameNetworkManager : MonoBehaviour
             }
         });
 
-        socket.On("controllerDisconnected", (response) =>
+        socket.On("disconnect", (response) =>
         {
             // CRITICAL: The following Unity API calls (Destroy, Remove from Dictionary)
             // MUST execute on the main thread.

@@ -10,6 +10,7 @@ public class NetworkPlayerMovement : MonoBehaviour
     {
         _playerId = playerId;
         gameObject.name = "Player_" + playerId; // For easy identification in Hierarchy
+        Debug.Log($"Spawn player");
     }
 
     public void ProcessInput(string inputType)
