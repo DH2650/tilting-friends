@@ -3,6 +3,7 @@ using UnityEngine.SceneManagement;
 
 public class SceneController : MonoBehaviour
 {
+    public GameObject networkManagerObject;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     public void PlayGame()
     {
@@ -17,6 +18,10 @@ public class SceneController : MonoBehaviour
 
     public void VSQuit()
     {
+        networkManagerObject = GameObject.FindGameObjectWithTag("NetworkManager");
+        NetworkManager networkManager = networkManagerObject.GetComponent<NetworkManager>();
+        networkManager.players.Clear();
+
         SceneManager.LoadScene("MainMenu");
     }
 

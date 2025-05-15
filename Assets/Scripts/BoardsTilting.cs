@@ -26,13 +26,17 @@ public class Board: MonoBehaviour
     void Start()
     {
 
-        GameObject arrowObj = GameObject.FindGameObjectWithTag("Arrow");
-        if (arrowObj != null)
-            arrow = arrowObj.GetComponent<Rigidbody>();
-            //ogArrowRotation = arrow.transform.rotation;
+//         GameObject arrowObj = GameObject.FindGameObjectWithTag("Arrow");
+//         if (arrowObj != null)
+//             arrow = arrowObj.GetComponent<Rigidbody>();
+//             //ogArrowRotation = arrow.transform.rotation;
 
-        NetworkManager networkManager = networkManagerObject.GetComponent<NetworkManager>();
-        players = networkManager.players;
+        networkManagerObject = GameObject.FindGameObjectWithTag("NetworkManager");
+        if (networkManagerObject != null)
+        {
+            NetworkManager networkManager = networkManagerObject.GetComponent<NetworkManager>();
+            players = networkManager.players;
+        }
     }
 
     void updatePlayerDebugInfo() {
@@ -58,7 +62,7 @@ public class Board: MonoBehaviour
             NetworkPlayerMovement ps = player.GetComponent<NetworkPlayerMovement>();
             Rigidbody rb = ps.rb;
             if (rb.transform.position.y > tiltCutoffY)
-                norm += rb.transform.position;
+                norm = rb.transform.position;
 //             Debug.Log($"Player transform: {rb.transform.position}");
         }
 
@@ -91,6 +95,6 @@ public class Board: MonoBehaviour
 
         // Rotate
         transform.rotation = Quaternion.Slerp(transform.rotation, bRotation, Time.deltaTime*smooth);
-        arrow.transform.rotation = ogArrowRotation * transform.rotation;
+//         arrow.transform.rotation = ogArrowRotation * transform.rotation;
     }
 }

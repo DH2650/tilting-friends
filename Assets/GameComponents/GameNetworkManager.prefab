@@ -46,3 +46,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   serverURL: ws://localhost:3000
   playerPrefab: {fileID: 4305074925674671578, guid: 28f1c3f635d29fe43892c5f791b62bbb, type: 3}
+  debug: {fileID: 0}
