@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 988cabc8aaf20854d99fcf08c77bf7ef
+timeCreated: 1461258184
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 61186
+  packageName: Autumn planet pack
+  packageVersion: 1.0
+  assetPath: Assets/Almgp_unity5_ice/prefabs/sky/sky_sphere.prefab
+  uploadId: 114089
