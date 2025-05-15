@@ -706,6 +706,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aaa7026c5e2e943139957c88bcb78ae1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  networkManagerObject: {fileID: 0}
 --- !u!4 &510889718
 Transform:
   m_ObjectHideFlags: 0
@@ -1484,6 +1485,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   serverURL: ws://localhost:3000
   playerPrefab: {fileID: 4305074925674671578, guid: 28f1c3f635d29fe43892c5f791b62bbb, type: 3}
+  playerMaterials:
+  - {fileID: 2100000, guid: c02a17ecbe54d5945a36c99cba91caf8, type: 2}
+  - {fileID: 2100000, guid: cbefd07bc5aa7ab40a79b0ab2e50e038, type: 2}
+  - {fileID: 2100000, guid: a36143d2b82b8ee4ca1010da7e7804c5, type: 2}
+  - {fileID: 2100000, guid: 21f8d4cb8708eef4ba0e3e012dfc58d1, type: 2}
   debug: {fileID: 1887298640}
 --- !u!4 &872223122
 Transform:
@@ -2361,6 +2367,8 @@ MonoBehaviour:
   rotateAngle: 30
   platformRadius: 10
   tiltCutoffY: -7
+  secondCutoff: -200
+  respawnPosition: {x: 0, y: 5, z: 0}
   debug: {fileID: 1887298640}
   board: {fileID: 667111551}
   networkManagerObject: {fileID: 872223120}
