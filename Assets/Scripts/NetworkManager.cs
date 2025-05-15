@@ -7,9 +7,9 @@ using Newtonsoft.Json.Linq; // Required for JToken
 using System.Collections.Generic;
 // using System; // No longer needed for Action if queue is removed
 
-public class GameNetworkManager : MonoBehaviour
+public class NetworkManager : MonoBehaviour
 {
-    public static GameNetworkManager Instance { get; private set; }
+    public static NetworkManager Instance { get; private set; }
 
     private SocketIOUnity socket; // Example, replace with actual type
 
