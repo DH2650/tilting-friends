@@ -27,7 +27,7 @@ public class GameManager : MonoBehaviour
             balls[i].SetActive(i == 0);
         }
 
-        mainCamera.transform.position = new Vector3(35.35f, 11.68f, 0f);
+//         mainCamera.transform.position = new Vector3(35.35f, 11.68f, 0f);
         
 
 
@@ -56,13 +56,9 @@ public class GameManager : MonoBehaviour
         Vector3 cameraStart = mainCamera.transform.position;
         Vector3 cameraEnd = new Vector3(
             cameraStart.x,
-            cameraStart.y + 25f,
+            cameraStart.y,
             cameraStart.z 
             );
-
-        
-
-       
 
         float elapsed = 0f;
 
