@@ -2,8 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Unity Web Controller</title>
     <link rel="stylesheet" href="style.css">
 </head>
@@ -16,12 +15,14 @@
     <button id="joinGameButton">Join Game</button>
 </div>
 
-<div id="controls" style="display: none;">
+<div id="controls" class="controls">
     <button id="buttonUp">Up</button>
+
+    <div id="updown">
+        <button id="buttonLeft">Left</button>
+        <button id="buttonRight">Right</button>
+    </div>
     <button id="buttonDown">Down</button>
-    <button id="buttonLeft">Left</button>
-    <button id="buttonRight">Right</button>
-    <button id="buttonActionA">Action A</button>
 </div>
 
 <script src="/socket.io/socket.io.js"></script>
