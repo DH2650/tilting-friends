@@ -16,6 +16,7 @@ public class GameNetworkManager : MonoBehaviour
     public string serverURL = "ws://localhost:3000";
     public Dictionary<string, GameObject> players = new Dictionary<string, GameObject>();
     public GameObject playerPrefab; // Assign your player prefab in the Inspector
+    [SerializeField] DebugOverlay debug;
 
     void Awake()
     {
@@ -35,10 +36,6 @@ public class GameNetworkManager : MonoBehaviour
     {
         ConnectToServer();
     }
-
-    // No more Update() method for queue processing, unless you need it for other logic.
-    // If your library doesn't run callbacks on the main thread, you might re-introduce
-    // Update() to poll flags set by callbacks and then execute Unity API calls here.
 
     void ConnectToServer()
     {
@@ -84,6 +81,7 @@ public class GameNetworkManager : MonoBehaviour
                     // This assumes the server sends a JSON object as the first (or only) argument.
                     // response.GetValue<JToken>() might get the first JToken in the response payload.
                     string controllerId = GetField(response.ToString(), "controllerId");
+                    string playerName = GetInput(response.ToString(), "assignedPlayerId");
 
                     if (string.IsNullOrEmpty(controllerId))
                     {
@@ -97,9 +95,11 @@ public class GameNetworkManager : MonoBehaviour
                     if (!players.ContainsKey(controllerId) && playerPrefab != null)
                     {
                         GameObject newPlayer = Instantiate(playerPrefab, playerPrefab.transform.position, Quaternion.identity);
-                        // newPlayer.name = "Player_" + controllerId; // Example: set name for easier debugging
-                        // Example: PlayerScript ps = newPlayer.GetComponent<PlayerScript>();
-                        // if (ps != null) ps.Initialize(controllerId);
+
+                        NetworkPlayerMovement ps = newPlayer.GetComponent<NetworkPlayerMovement>();
+                        Rigidbody rb = newPlayer.GetComponent<Rigidbody>();
+                        ps.Initialize(rb, playerName);
+
                         players.Add(controllerId, newPlayer);
                         Debug.Log("Spawned player: " + controllerId);
                     }
@@ -217,5 +217,18 @@ public class GameNetworkManager : MonoBehaviour
         Debug.Log($"input: {controllerId}");
 
         return controllerId;
+    }
+
+    void Update()
+    {
+        string msg = "";
+
+        foreach(var (controllerId, player) in players)
+        {
+            NetworkPlayerMovement ps = player.GetComponent<NetworkPlayerMovement>();
+
+            msg += $"Name: {ps.name} - Moving: {ps.moving} - Pos: {ps.rb.transform.position}\n";
+        }
+        debug.debugText.text = msg;
     }
 }

@@ -915,11 +915,11 @@ PlayerSettings:
   captureStartupLogs: {}
   activeInputHandler: 2
   windowsGamepadBackendHint: 0
-  cloudProjectId: 696bc4ec-39bd-45df-a9cc-0deb484e4d16
+  cloudProjectId: 5e5876ee-fa01-4bbf-b662-8037fc1bdaa0
   framebufferDepthMemorylessMode: 0
   qualitySettingsNames: []
   projectName: Tilting Friends
-  organizationId: heliuhm
+  organizationId: tilting-friends
   cloudEnabled: 0
   legacyClampBlendShapeWeights: 0
   hmiLoadingImage: {fileID: 0}

@@ -27,7 +27,7 @@ io.on('connection', (socket) => {
     });
 
     socket.on('registerController', (data) => {
-        const playerId = data.playerId || socket.id; // Use a provided ID or socket ID
+        const playerId = data.playerId; // Use a provided ID or socket ID
         console.log('Controller registered for player:', playerId, 'Socket ID:', socket.id);
         playerControllers[socket.id] = playerId; // Map socket ID to player ID
 

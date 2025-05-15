@@ -6,7 +6,7 @@ public class SceneController : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     public void PlayGame()
     {
-        SceneManager.LoadScene("SampleScene");
+        SceneManager.LoadScene("SurvivalMode");
     }
 
     public void QuitGame()

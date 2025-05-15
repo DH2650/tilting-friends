@@ -2,55 +2,79 @@ using UnityEngine;
 
 public class NetworkPlayerMovement : MonoBehaviour
 {
-    public float speed = 5f;
-    private string _playerId;
-    private string state = "none";
+    public float moveSpeed = 5f;
+    public float rotationSpeed = 10f;
+
+    public string name;
+    public Vector3 moveDir = Vector3.zero;
+    public Rigidbody rb;
+    public int moving = 0;
 
     // Optional: Call this after instantiating the player
-    public void Initialize(string playerId)
+    public void Initialize(Rigidbody body, string playerName)
     {
-        _playerId = playerId;
-        gameObject.name = "Player_" + playerId; // For easy identification in Hierarchy
+        name = playerName;
+        rb = body;
+
         Debug.Log($"Init player");
     }
 
     public void ProcessInput(string inputType)
     {
-        if (inputType.Contains("pressed"))
+        switch (inputType)
         {
-            state = inputType;
-        }
-        else
-        {
-            state = "none";
+            case "up_pressed":
+                moveDir.z += 1;
+                moving += 1;
+                break;
+            case "up_released":
+                moveDir.z -= 1;
+                moving -= 1;
+                break;
+            case "down_pressed":
+                moveDir.z -= 1;
+                moving += 1;
+                break;
+            case "down_released":
+                moveDir.z += 1;
+                moving -= 1;
+                break;
+            case "left_pressed":
+                moveDir.x -= 1;
+                moving += 1;
+                break;
+            case "left_released":
+                moveDir.x += 1;
+                moving -= 1;
+                break;
+            case "right_pressed":
+                moveDir.x += 1;
+                moving += 1;
+                break;
+            case "right_released":
+                moveDir.x -= 1;
+                moving -= 1;
+                break;
         }
     }
 
-    void Update()
+    void FixedUpdate()
     {
-        if (state != "none") {
-            Debug.Log($"Move player");
-            switch (state)
-            {
-                case "up_pressed":
-                    // Start moving up or set a flag
-                    transform.Translate(Vector3.back * speed * Time.deltaTime); // Simple example
-                    break;
-                case "down_pressed":
-                    transform.Translate(Vector3.forward * speed * Time.deltaTime);
-                    break;
-                // ... handle other inputs (left, right, actionA_pressed, etc.)
-                case "left_pressed":
-                    transform.Translate(Vector3.right * speed * Time.deltaTime);
-                    break;
-                case "right_pressed":
-                    transform.Translate(Vector3.left * speed * Time.deltaTime);
-                    break;
-                case "actionA_pressed":
-                    transform.Translate(Vector3.up * speed * Time.deltaTime); // Simple example
-                    // Perform action
-                    break;
-            }
+//         if (rb == null) return;
+
+        if (moveDir != Vector3.zero && moving != 0)
+        {
+            Vector3 moveDirNormalized = moveDir.normalized;
+
+            // Move the character
+            rb.MovePosition(rb.position + moveDirNormalized * moveSpeed * Time.fixedDeltaTime);
+
+            // Smooth rotation towards movement direction
+            Quaternion toRotation = Quaternion.LookRotation(-moveDirNormalized, Vector3.up);
+            rb.MoveRotation(Quaternion.Slerp(rb.rotation, toRotation, rotationSpeed * Time.fixedDeltaTime));
+        } else
+        {
+            moveDir = Vector3.zero;
         }
     }
 }
