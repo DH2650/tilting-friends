@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 007c4491edb7a1f4785ad7543f9e065e
+timeCreated: 1460931495
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 61186
+  packageName: Autumn planet pack
+  packageVersion: 1.0
+  assetPath: Assets/Almgp_unity5_ice/materials/fx/glow.mat
+  uploadId: 114089

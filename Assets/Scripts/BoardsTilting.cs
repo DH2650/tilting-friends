@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-public class Board: MonoBehaviour
+public class BoardsTilting : MonoBehaviour
 {
     public float smooth = 5.0f;
     public float rotateAngle = 30.0f;
@@ -12,12 +12,12 @@ public class Board: MonoBehaviour
     [SerializeField] DebugOverlay debug;
     [SerializeField] Rigidbody board;
 
-
+    public bool singlePlayerMode = true;
     private Rigidbody rb1;
     private Rigidbody rb2;
-    private Rigidbody arrow;
+    //private Rigidbody arrow;
 
-    Quaternion ogArrowRotation;
+    //Quaternion ogArrowRotation;
 
     void Start()
     {
@@ -29,51 +29,60 @@ public class Board: MonoBehaviour
         if (player2 != null)
             rb2 = player2.GetComponent<Rigidbody>();
 
-        GameObject arrowObj = GameObject.FindGameObjectWithTag("Arrow");
-        if (arrowObj != null)
-            arrow = arrowObj.GetComponent<Rigidbody>();
-            ogArrowRotation = arrow.transform.rotation;
+        //GameObject arrowObj = GameObject.FindGameObjectWithTag("Arrow");
+        //if (arrowObj != null)
+        //{
+        //    arrow = arrowObj.GetComponent<Rigidbody>();
+        //    if (arrow != null)
+        //        ogArrowRotation = arrow.transform.rotation;
+        //}
     }
 
     void Update()
     {
-        // Get positions of both players
+        // Track active players
+        int activePlayers = 0;
         Vector3 norm = Vector3.zero;
-        if (rb1.transform.position.y > tiltCutoffY)
-            norm = rb1.transform.position;
 
-        if (rb2.transform.position.y > tiltCutoffY)
-            norm = norm + rb2.transform.position;
+        // Check Player 1
+        if (rb1 != null && rb1.transform.position.y > tiltCutoffY)
+        {
+            norm += rb1.transform.position;
+            activePlayers++;
+        }
 
-        // Normalize x according to platformRadius distance from the centre
-        if (norm.x > platformRadius) {
-            norm.x = platformRadius;
+        // Check Player 2
+        if (rb2 != null && rb2.transform.position.y > tiltCutoffY)
+        {
+            norm += rb2.transform.position;
+            activePlayers++;
         }
-        else if (norm.x < -platformRadius) {
-            norm.x = -platformRadius;
-        }
-        norm.x /= platformRadius;
 
-        // Normalize z according to platformRadius distance from the centre
-        if (norm.z > platformRadius) {
-            norm.z = platformRadius;
-        }
-        else if (norm.z < -platformRadius) {
-            norm.z = -platformRadius;
-        }
-        norm.z /= platformRadius;
+        // Don't tilt if no players are active
+        if (activePlayers == 0) return;
 
-        // Translate to direction with rotateAngle
+        // Average the positions if multiple players
+        if (activePlayers > 1)
+        {
+            norm /= activePlayers;
+        }
+
+        // Normalize positions relative to platform
+        norm.x = Mathf.Clamp(norm.x, -platformRadius, platformRadius) / platformRadius;
+        norm.z = Mathf.Clamp(norm.z, -platformRadius, platformRadius) / platformRadius;
+
+        // Calculate rotation direction
         Vector3 direction = norm * rotateAngle;
 
-        // Output debug info
-        debug.debugText.text = $"P1 Pos: {rb1.transform.position}\nP2 Pos: {rb2.transform.position}\nNorm: {norm}\nDir: {direction}";
+        // Update debug text
+        debug.debugText.text = $"Active Players: {activePlayers}\n" +
+                              $"Norm: {norm}\nDir: {direction}";
 
-        // Convert the rotation angles into quaternions
+        // Calculate and apply rotation
         Quaternion bRotation = Quaternion.Euler(direction.z, 0.0f, -direction.x);
-
-        // Rotate
-        transform.rotation = Quaternion.Slerp(transform.rotation, bRotation, Time.deltaTime*smooth);
-        arrow.transform.rotation = ogArrowRotation * transform.rotation;
+        transform.rotation = Quaternion.Slerp(transform.rotation, bRotation, Time.deltaTime * smooth);
     }
+    
+
+
 }

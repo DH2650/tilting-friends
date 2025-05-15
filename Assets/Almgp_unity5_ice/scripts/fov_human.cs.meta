@@ -1,0 +1,19 @@
+fileFormatVersion: 2
+guid: e80c0263fd257e5438407c2ad7d7b033
+timeCreated: 1461074301
+licenseType: Store
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 61186
+  packageName: Autumn planet pack
+  packageVersion: 1.0
+  assetPath: Assets/Almgp_unity5_ice/scripts/fov_human.cs
+  uploadId: 114089

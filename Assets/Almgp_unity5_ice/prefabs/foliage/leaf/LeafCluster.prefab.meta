@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: fdb5031e003fb9a4c9671575df7c0cdc
+timeCreated: 1461093511
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 61186
+  packageName: Autumn planet pack
+  packageVersion: 1.0
+  assetPath: Assets/Almgp_unity5_ice/prefabs/foliage/leaf/LeafCluster.prefab
+  uploadId: 114089
