@@ -219,8 +219,7 @@ public class NetworkManager : MonoBehaviour
         return controllerId;
     }
 
-    void Update()
-    {
+    void updatePlayerDebugInfo() {
         string msg = "";
 
         foreach(var (controllerId, player) in players)
@@ -230,5 +229,10 @@ public class NetworkManager : MonoBehaviour
             msg += $"Name: {ps.name} - Moving: {ps.moving} - Pos: {ps.rb.transform.position}\n";
         }
         debug.debugText.text = msg;
+    }
+
+    void Update()
+    {
+//         updatePlayerDebugInfo();
     }
 }

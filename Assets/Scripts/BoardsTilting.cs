@@ -18,6 +18,9 @@ public class Board: MonoBehaviour
     private Rigidbody rb2;
     private Rigidbody arrow;
 
+    public GameObject networkManagerObject;
+    public Dictionary<string, GameObject> players;
+
     Quaternion ogArrowRotation;
 
     void Start()
@@ -34,47 +37,63 @@ public class Board: MonoBehaviour
         if (arrowObj != null)
             arrow = arrowObj.GetComponent<Rigidbody>();
             //ogArrowRotation = arrow.transform.rotation;
+
+        NetworkManager networkManager = networkManagerObject.GetComponent<NetworkManager>();
+        players = networkManager.players;
+    }
+
+    void updatePlayerDebugInfo() {
+        string msg = "";
+
+        foreach(var (controllerId, player) in players)
+        {
+            NetworkPlayerMovement ps = player.GetComponent<NetworkPlayerMovement>();
+
+            msg += $"Name: {ps.name} - Moving: {ps.moving} - Pos: {ps.rb.transform.position}\n";
+        }
+        debug.debugText.text = msg;
     }
 
     void Update()
     {
-        // Get positions of both players
-        Vector3 norm = Vector3.zero;
-        if (rb1.transform.position.y > tiltCutoffY)
-            norm = rb1.transform.position;
-
-        if (rb2.transform.position.y > tiltCutoffY)
-            norm = norm + rb2.transform.position;
-
-        // Normalize x according to platformRadius distance from the centre
-        if (norm.x > platformRadius) {
-            norm.x = platformRadius;
-        }
-        else if (norm.x < -platformRadius) {
-            norm.x = -platformRadius;
-        }
-        norm.x /= platformRadius;
-
-        // Normalize z according to platformRadius distance from the centre
-        if (norm.z > platformRadius) {
-            norm.z = platformRadius;
-        }
-        else if (norm.z < -platformRadius) {
-            norm.z = -platformRadius;
-        }
-        norm.z /= platformRadius;
-
-        // Translate to direction with rotateAngle
-        Vector3 direction = norm * rotateAngle;
-
-        // Output debug info
-        debug.debugText.text = $"P1 Pos: {rb1.transform.position}\nP2 Pos: {rb2.transform.position}\nNorm: {norm}\nDir: {direction}";
-
-        // Convert the rotation angles into quaternions
-        Quaternion bRotation = Quaternion.Euler(direction.z, 0.0f, -direction.x);
-
-        // Rotate
-        transform.rotation = Quaternion.Slerp(transform.rotation, bRotation, Time.deltaTime*smooth);
-        //arrow.transform.rotation = ogArrowRotation * transform.rotation;
+        updatePlayerDebugInfo();
+//         // Get positions of both players
+//         Vector3 norm = Vector3.zero;
+//         if (rb1.transform.position.y > tiltCutoffY)
+//             norm = rb1.transform.position;
+//
+//         if (rb2.transform.position.y > tiltCutoffY)
+//             norm = norm + rb2.transform.position;
+//
+//         // Normalize x according to platformRadius distance from the centre
+//         if (norm.x > platformRadius) {
+//             norm.x = platformRadius;
+//         }
+//         else if (norm.x < -platformRadius) {
+//             norm.x = -platformRadius;
+//         }
+//         norm.x /= platformRadius;
+//
+//         // Normalize z according to platformRadius distance from the centre
+//         if (norm.z > platformRadius) {
+//             norm.z = platformRadius;
+//         }
+//         else if (norm.z < -platformRadius) {
+//             norm.z = -platformRadius;
+//         }
+//         norm.z /= platformRadius;
+//
+//         // Translate to direction with rotateAngle
+//         Vector3 direction = norm * rotateAngle;
+//
+//         // Output debug info
+//         debug.debugText.text = $"P1 Pos: {rb1.transform.position}\nP2 Pos: {rb2.transform.position}\nNorm: {norm}\nDir: {direction}";
+//
+//         // Convert the rotation angles into quaternions
+//         Quaternion bRotation = Quaternion.Euler(direction.z, 0.0f, -direction.x);
+//
+//         // Rotate
+//         transform.rotation = Quaternion.Slerp(transform.rotation, bRotation, Time.deltaTime*smooth);
+//         //arrow.transform.rotation = ogArrowRotation * transform.rotation;
     }
 }

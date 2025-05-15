@@ -1069,6 +1069,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b8761a4b51369ca47bfd37a4052f6306, type: 3}
+--- !u!1 &954150145 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7350518799331965798, guid: b6663f07738c240669fcfe79e700c238, type: 3}
+  m_PrefabInstance: {fileID: 1240879126363270258}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1027277762
 GameObject:
   m_ObjectHideFlags: 0
@@ -1653,6 +1658,7 @@ MonoBehaviour:
   tiltCutoffY: -7
   debug: {fileID: 1887298640}
   board: {fileID: 667111551}
+  networkManagerObject: {fileID: 954150145}
 --- !u!64 &2054746103
 MeshCollider:
   m_ObjectHideFlags: 0
