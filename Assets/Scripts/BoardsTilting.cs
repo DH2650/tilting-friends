@@ -25,13 +25,6 @@ public class Board: MonoBehaviour
 
     void Start()
     {
-        // Get players with their rigid bodies
-        GameObject player1 = GameObject.FindGameObjectWithTag("Player1");
-        GameObject player2 = GameObject.FindGameObjectWithTag("Player2");
-        if (player1 != null)
-            rb1 = player1.GetComponent<Rigidbody>();
-        if (player2 != null)
-            rb2 = player2.GetComponent<Rigidbody>();
 
         GameObject arrowObj = GameObject.FindGameObjectWithTag("Arrow");
         if (arrowObj != null)
@@ -58,42 +51,46 @@ public class Board: MonoBehaviour
     {
         updatePlayerDebugInfo();
 //         // Get positions of both players
-//         Vector3 norm = Vector3.zero;
-//         if (rb1.transform.position.y > tiltCutoffY)
-//             norm = rb1.transform.position;
-//
-//         if (rb2.transform.position.y > tiltCutoffY)
-//             norm = norm + rb2.transform.position;
-//
-//         // Normalize x according to platformRadius distance from the centre
-//         if (norm.x > platformRadius) {
-//             norm.x = platformRadius;
-//         }
-//         else if (norm.x < -platformRadius) {
-//             norm.x = -platformRadius;
-//         }
-//         norm.x /= platformRadius;
-//
-//         // Normalize z according to platformRadius distance from the centre
-//         if (norm.z > platformRadius) {
-//             norm.z = platformRadius;
-//         }
-//         else if (norm.z < -platformRadius) {
-//             norm.z = -platformRadius;
-//         }
-//         norm.z /= platformRadius;
-//
-//         // Translate to direction with rotateAngle
-//         Vector3 direction = norm * rotateAngle;
-//
-//         // Output debug info
-//         debug.debugText.text = $"P1 Pos: {rb1.transform.position}\nP2 Pos: {rb2.transform.position}\nNorm: {norm}\nDir: {direction}";
-//
-//         // Convert the rotation angles into quaternions
-//         Quaternion bRotation = Quaternion.Euler(direction.z, 0.0f, -direction.x);
-//
-//         // Rotate
-//         transform.rotation = Quaternion.Slerp(transform.rotation, bRotation, Time.deltaTime*smooth);
-//         //arrow.transform.rotation = ogArrowRotation * transform.rotation;
+        Vector3 norm = Vector3.zero;
+
+        foreach(var (controllerId, player) in players)
+        {
+            NetworkPlayerMovement ps = player.GetComponent<NetworkPlayerMovement>();
+            Rigidbody rb = ps.rb;
+            if (rb.transform.position.y > tiltCutoffY)
+                norm += rb.transform.position;
+//             Debug.Log($"Player transform: {rb.transform.position}");
+        }
+
+        // Normalize x according to platformRadius distance from the centre
+        if (norm.x > platformRadius) {
+            norm.x = platformRadius;
+        }
+        else if (norm.x < -platformRadius) {
+            norm.x = -platformRadius;
+        }
+        norm.x /= platformRadius;
+
+        // Normalize z according to platformRadius distance from the centre
+        if (norm.z > platformRadius) {
+            norm.z = platformRadius;
+        }
+        else if (norm.z < -platformRadius) {
+            norm.z = -platformRadius;
+        }
+        norm.z /= platformRadius;
+
+        // Translate to direction with rotateAngle
+        Vector3 direction = norm * rotateAngle;
+
+        // Output debug info
+        debug.debugText.text = $"Norm: {norm}\nDir: {direction}";
+
+        // Convert the rotation angles into quaternions
+        Quaternion bRotation = Quaternion.Euler(direction.z, 0.0f, -direction.x);
+
+        // Rotate
+        transform.rotation = Quaternion.Slerp(transform.rotation, bRotation, Time.deltaTime*smooth);
+        arrow.transform.rotation = ogArrowRotation * transform.rotation;
     }
 }

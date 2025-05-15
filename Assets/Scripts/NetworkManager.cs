@@ -163,7 +163,7 @@ public class NetworkManager : MonoBehaviour
 
                     if (players.ContainsKey(controllerId))
                     {
-                        Debug.Log($"Received input '{response.ToString() ?? "null"}' for player '{controllerId}'");
+//                         Debug.Log($"Received input '{response.ToString() ?? "null"}' for player '{controllerId}'");
 
                         GameObject playerObject = players[controllerId];
                         playerObject.GetComponent<NetworkPlayerMovement>()?.ProcessInput(rawInput);
@@ -200,7 +200,7 @@ public class NetworkManager : MonoBehaviour
         int start = json.IndexOf(find);
 //         Debug.Log($"Start Index: {start}");
         string controllerId = json.Substring(start + find.Length + 3, 20);
-        Debug.Log($"controllerId: {controllerId}");
+//         Debug.Log($"controllerId: {controllerId}");
 
         return controllerId;
     }
@@ -209,12 +209,12 @@ public class NetworkManager : MonoBehaviour
     {
 //         Debug.Log($"JSON string: {json}");
         int start = json.IndexOf(find);
-        Debug.Log($"Start Index: {start + find.Length + 3}");
+//         Debug.Log($"Start Index: {start + find.Length + 3}");
         int end = json.LastIndexOf('"');
-        Debug.Log($"End Index: {end}");
-        Debug.Log($"Diff: {end - (start + find.Length + 3)}");
+//         Debug.Log($"End Index: {end}");
+//         Debug.Log($"Diff: {end - (start + find.Length + 3)}");
         string controllerId = json.Substring(start + find.Length + 3, end - (start + find.Length + 3));
-        Debug.Log($"input: {controllerId}");
+//         Debug.Log($"input: {controllerId}");
 
         return controllerId;
     }
