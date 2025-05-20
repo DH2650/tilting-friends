@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 // Add the namespace for your WebSocket library (e.g., using SocketIOClient;)
 // Example using a hypothetical SocketIOUnity wrapper:
 using SocketIOClient; // This will depend on the library you choose
@@ -16,7 +17,15 @@ public class NetworkManager : MonoBehaviour
     public string serverURL = "ws://localhost:3000";
     public Dictionary<string, GameObject> players = new Dictionary<string, GameObject>();
     public GameObject playerPrefab; // Assign your player prefab in the Inspector
+    public GameObject board;
+    public bool isBoard1 = true;
+    public Vector3 spawnAdj = new Vector3(0, 2.0f, 0);
+    public Material[] playerMaterials = new Material[3];
+    int materialCount = 0;
     [SerializeField] DebugOverlay debug;
+    private Transform cat;
+    private Transform catBody;
+    private Transform catTail;
 
     void Awake()
     {
@@ -94,7 +103,41 @@ public class NetworkManager : MonoBehaviour
                     Debug.Log("Controller connected (player joined): " + controllerId);
                     if (!players.ContainsKey(controllerId) && playerPrefab != null)
                     {
-                        GameObject newPlayer = Instantiate(playerPrefab, playerPrefab.transform.position, Quaternion.identity);
+                        GameObject newPlayer = new GameObject();
+                        Scene scene = SceneManager.GetActiveScene();
+                        if (scene.name == "SurvivalMode")
+                        {
+                            newPlayer = Instantiate(playerPrefab, playerPrefab.transform.position, Quaternion.identity);
+                        }
+                        else if (scene.name == "VSMode")
+                        {
+                            if (isBoard1)
+                            {
+                                board = GameObject.Find("Board1");
+                                isBoard1 = false;
+                            }
+                            else
+                            {
+                                board = GameObject.Find("Board2");
+                                isBoard1 = true;
+                            }
+                            
+                            newPlayer = Instantiate(playerPrefab, board.transform.position + spawnAdj, Quaternion.identity);
+                        }
+
+
+                        cat = newPlayer.transform.GetChild(0);
+                        catTail = cat.transform.GetChild(4);
+                        catBody = cat.transform.GetChild(3);
+                        catTail.GetComponent<Renderer>().material = playerMaterials[materialCount];
+                        catBody.GetComponent<Renderer>().material = playerMaterials[materialCount];
+                        if (materialCount < 5){
+                            materialCount += 1; 
+                        }
+                        else {
+                            materialCount = 0;
+                        }
+                            
 
                         NetworkPlayerMovement ps = newPlayer.GetComponent<NetworkPlayerMovement>();
                         Rigidbody rb = newPlayer.GetComponent<Rigidbody>();

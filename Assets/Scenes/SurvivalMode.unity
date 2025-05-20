@@ -570,6 +570,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 5
   rotationSpeed: 10
+  showDebugInfo: 1
+  debugText: {fileID: 0}
 --- !u!65 &467156634
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2368,7 +2370,7 @@ MonoBehaviour:
   platformRadius: 10
   tiltCutoffY: -7
   secondCutoff: -200
-  respawnPosition: {x: 0, y: 5, z: 0}
+  respawnPosition: {x: 0, y: 2, z: 0}
   debug: {fileID: 1887298640}
   board: {fileID: 667111551}
   networkManagerObject: {fileID: 872223120}
