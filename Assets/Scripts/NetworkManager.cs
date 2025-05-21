@@ -6,6 +6,8 @@ using SocketIOClient; // This will depend on the library you choose
 using SocketIOClient.Newtonsoft.Json; // If using Newtonsoft for JSON
 using Newtonsoft.Json.Linq; // Required for JToken
 using System.Collections.Generic;
+using TMPro; // Add this at the top
+
 // using System; // No longer needed for Action if queue is removed
 
 public class NetworkManager : MonoBehaviour
@@ -103,48 +105,24 @@ public class NetworkManager : MonoBehaviour
                     Debug.Log("Controller connected (player joined): " + controllerId);
                     if (!players.ContainsKey(controllerId) && playerPrefab != null)
                     {
-                        GameObject newPlayer = new GameObject();
-                        Scene scene = SceneManager.GetActiveScene();
-                        if (scene.name == "SurvivalMode")
-                        {
-                            newPlayer = Instantiate(playerPrefab, playerPrefab.transform.position, Quaternion.identity);
-                        }
-                        else if (scene.name == "VSMode")
-                        {
-                            if (isBoard1)
-                            {
-                                board = GameObject.Find("Board1");
-                                isBoard1 = false;
-                            }
-                            else
-                            {
-                                board = GameObject.Find("Board2");
-                                isBoard1 = true;
-                            }
-                            
-                            newPlayer = Instantiate(playerPrefab, board.transform.position + spawnAdj, Quaternion.identity);
-                        }
-
-
-                        cat = newPlayer.transform.GetChild(0);
-                        catTail = cat.transform.GetChild(4);
-                        catBody = cat.transform.GetChild(3);
-                        catTail.GetComponent<Renderer>().material = playerMaterials[materialCount];
-                        catBody.GetComponent<Renderer>().material = playerMaterials[materialCount];
-                        if (materialCount < 5){
-                            materialCount += 1; 
-                        }
-                        else {
-                            materialCount = 0;
-                        }
-                            
-
+                        GameObject newPlayer = Instantiate(playerPrefab, playerPrefab.transform.position, Quaternion.identity);
                         NetworkPlayerMovement ps = newPlayer.GetComponent<NetworkPlayerMovement>();
                         Rigidbody rb = newPlayer.GetComponent<Rigidbody>();
+                        TextMeshProUGUI tmp = newPlayer.GetComponentInChildren<TextMeshProUGUI>();
+
+                        if (tmp == null)
+                        {
+                            Debug.LogError("Couldn't find any TextMeshProUGUI component in children.");
+                        }
+                        else
+                        {
+                            tmp.text = playerName;
+                            Debug.Log("Successfully set name to: " + playerName);
+                        }
                         ps.Initialize(rb, playerName);
 
                         players.Add(controllerId, newPlayer);
-                        Debug.Log("Spawned player: " + controllerId);
+                        Debug.Log("Spawned player: " + playerName);
                     }
                 }
                 catch (System.Exception ex)
