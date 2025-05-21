@@ -53,40 +53,39 @@ public class GameManager : MonoBehaviour
 //         StartCoroutine(MoveToNextBoard(nextLevel));
     }
 
-    private IEnumerator MoveToNextBoard(int nextLevel)
-    {
-        Vector3 boardStart = boardParent.position;
-        Vector3 boardEnd = boards[nextLevel].transform.position;
-
-        Vector3 cameraStart = mainCamera.transform.position;
-        Vector3 cameraStart = mainCamera.transform.position;
-        Vector3 cameraEnd = new Vector3(
-            cameraStart.x,
-            cameraStart.y,
-            cameraStart.z 
-            );
-
-        float elapsed = 0f;
-
-        while (elapsed < transitionTime)
-        {
-            float t = elapsed / transitionTime;
-            mainCamera.transform.position = Vector3.Lerp(cameraStart, cameraEnd, t);
-
-            elapsed += Time.deltaTime;
-            yield return null;
-        }
-
-        // Snap to exact final position
-        mainCamera.transform.position = cameraEnd;
-
-        // Deactivate previous board and ball
-        boards[currentLevel].SetActive(false);
-        balls[currentLevel].SetActive(false);
-
-        currentLevel = nextLevel;
-        transitioning = false;
-    }
+//     private IEnumerator MoveToNextBoard(int nextLevel)
+//     {
+//         Vector3 boardStart = boardParent.position;
+//         Vector3 boardEnd = boards[nextLevel].transform.position;
+//
+//         Vector3 cameraStart = mainCamera.transform.position;
+//         Vector3 cameraEnd = new Vector3(
+//             cameraStart.x,
+//             cameraStart.y,
+//             cameraStart.z
+//             );
+//
+//         float elapsed = 0f;
+//
+//         while (elapsed < transitionTime)
+//         {
+//             float t = elapsed / transitionTime;
+//             mainCamera.transform.position = Vector3.Lerp(cameraStart, cameraEnd, t);
+//
+//             elapsed += Time.deltaTime;
+//             yield return null;
+//         }
+//
+//         // Snap to exact final position
+//         mainCamera.transform.position = cameraEnd;
+//
+//         // Deactivate previous board and ball
+//         boards[currentLevel].SetActive(false);
+//         balls[currentLevel].SetActive(false);
+//
+//         currentLevel = nextLevel;
+//         transitioning = false;
+//     }
 
     private void UpdateCameraPosition()
     {
