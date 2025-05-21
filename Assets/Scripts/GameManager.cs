@@ -42,10 +42,15 @@ public class GameManager : MonoBehaviour
         int nextLevel = currentLevel + 1;
 
         // Activate next board and ball before transition
+        boards[currentLevel].SetActive(false);
+        balls[currentLevel].SetActive(false);
+
         boards[nextLevel].SetActive(true);
         balls[nextLevel].SetActive(true);
 
-        StartCoroutine(MoveToNextBoard(nextLevel));
+        currentLevel = nextLevel;
+
+//         StartCoroutine(MoveToNextBoard(nextLevel));
     }
 
     private IEnumerator MoveToNextBoard(int nextLevel)
@@ -53,6 +58,7 @@ public class GameManager : MonoBehaviour
         Vector3 boardStart = boardParent.position;
         Vector3 boardEnd = boards[nextLevel].transform.position;
 
+        Vector3 cameraStart = mainCamera.transform.position;
         Vector3 cameraStart = mainCamera.transform.position;
         Vector3 cameraEnd = new Vector3(
             cameraStart.x,
