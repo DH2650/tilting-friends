@@ -208,8 +208,12 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 205975893923412348, guid: 0b2200e96167d48d3a5932dbcc4e64fe, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 307370844384447981, guid: 0b2200e96167d48d3a5932dbcc4e64fe, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 471216aa59bc04677b77a4c2c3ba8b93, type: 2}
     - target: {fileID: 440454628544764061, guid: 0b2200e96167d48d3a5932dbcc4e64fe, type: 3}
       propertyPath: m_LocalScale.x
       value: 7
@@ -302,6 +306,10 @@ PrefabInstance:
       propertyPath: m_LocalPosition.z
       value: -0.41
       objectReference: {fileID: 0}
+    - target: {fileID: 3538404057361502946, guid: 0b2200e96167d48d3a5932dbcc4e64fe, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 471216aa59bc04677b77a4c2c3ba8b93, type: 2}
     - target: {fileID: 3937601556017925936, guid: 0b2200e96167d48d3a5932dbcc4e64fe, type: 3}
       propertyPath: m_Name
       value: ChangingWorld
@@ -370,6 +378,14 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4509851243990641081, guid: 0b2200e96167d48d3a5932dbcc4e64fe, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 471216aa59bc04677b77a4c2c3ba8b93, type: 2}
+    - target: {fileID: 5416090740555226787, guid: 0b2200e96167d48d3a5932dbcc4e64fe, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 471216aa59bc04677b77a4c2c3ba8b93, type: 2}
     - target: {fileID: 5447625442255203079, guid: 0b2200e96167d48d3a5932dbcc4e64fe, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
