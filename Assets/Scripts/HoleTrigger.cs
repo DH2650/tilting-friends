@@ -6,10 +6,10 @@ public class HoleTrigger : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("entered collision");
+        Debug.Log("trigger entered");
         if (other.CompareTag("Ball"))
         {
-            Debug.Log("Tag was correct");
+            Debug.Log("correct tag");
             gameManager.LevelUp();
         }
     }

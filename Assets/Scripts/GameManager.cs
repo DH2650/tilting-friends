@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -21,76 +22,104 @@ public class GameManager : MonoBehaviour
     public Material snowySkybox;
     public Material sunnySkybox;
 
+    private bool VSMode;
+
 
     private int currentLevel = 0;
     private int nextLevel = 0;
     private bool transitioning = false;
-
+    private GameObject currentBall;
+    private Vector3 ballPos = new Vector3(0f, 2f, 0f);
     private void Start()
     {
         // Only activate the first board and ball at the start
         for (int i = 0; i < boards.Length; i++)
         {
+            balls[i].transform.position = boards[i].transform.position + ballPos;
             boards[i].SetActive(i == 0);
             balls[i].SetActive(i == 0);
         }
 
-//         mainCamera.transform.position = new Vector3(35.35f, 11.68f, 0f);
-        
+        //         mainCamera.transform.position = new Vector3(35.35f, 11.68f, 0f);
 
+
+
+    }
+
+    private void Update()
+    {
+        
+        currentBall = balls[currentLevel];
+        if (currentBall.transform.position.y < -100)
+        {
+            Debug.Log("level lost");
+            boards[currentLevel].SetActive(false);
+            balls[currentLevel].SetActive(false);
+            currentLevel = 0;
+            LoadLevel(0);
+            Start();
+            
+        }
 
     }
 
     public void LoadLevel(int level)
     {
-
+        Scene scene = SceneManager.GetActiveScene();
+        if (scene.name == "VSMode")
+        {
+            return;
+        }
 
         // Switch skybox
-        switch (level)
-        {
-            case 0:
-                RenderSettings.skybox = sunnySkybox;
-                break;
-            case 1:
-                RenderSettings.skybox = cloudySkybox;
-                break;
-            case 2:
-                RenderSettings.skybox = nightSkybox;
-                break;
-            case 3:
-                RenderSettings.skybox = snowySkybox;
-                break;
-            default:
-                Debug.LogWarning("No skybox defined for this level.");
-                break;
-        }
+            switch (level)
+            {
+                case 0:
+                    RenderSettings.skybox = sunnySkybox;
+                    break;
+                case 1:
+                    RenderSettings.skybox = cloudySkybox;
+                    break;
+                case 2:
+                    RenderSettings.skybox = nightSkybox;
+                    break;
+                case 3:
+                    RenderSettings.skybox = snowySkybox;
+                    break;
+                default:
+                    Debug.LogWarning("No skybox defined for this level.");
+                    break;
+            }
 
         // Update lighting
         DynamicGI.UpdateEnvironment();
     }
     public void LevelUp()
     {
-        Debug.Log("entered levelup");
-        if (transitioning || currentLevel >= boards.Length - 1)
+        if (transitioning)
             return;
+        else if (currentLevel >= boards.Length - 1)
+        {
+            Debug.Log("Game won!");
+            //ADD GAME WON HERE
+        }
+        else
+        {
+            transitioning = true;
+            nextLevel = currentLevel + 1;
 
-        transitioning = true;
-        Debug.Log("current level: " + currentLevel);
-        nextLevel = currentLevel + 1;
+            // Activate next board and ball before transition
+            boards[currentLevel].SetActive(false);
+            balls[currentLevel].SetActive(false);
 
-        // Activate next board and ball before transition
-        boards[currentLevel].SetActive(false);
-        balls[currentLevel].SetActive(false);
-
-        LoadLevel(nextLevel);
-        boards[nextLevel].SetActive(true);
-        balls[nextLevel].SetActive(true);
-
-        currentLevel = nextLevel;
-        Debug.Log("after");
-        Debug.Log("next level: " + nextLevel);
-        Debug.Log("current level: " + currentLevel);
-        transitioning = false;
+            LoadLevel(nextLevel);
+            boards[nextLevel].SetActive(true);
+            balls[nextLevel].SetActive(true);
+            balls[nextLevel].transform.position += new Vector3(3.0f, 0f, 0f);;
+            currentLevel = nextLevel;
+            transitioning = false;
+        }
+        
 
 
 

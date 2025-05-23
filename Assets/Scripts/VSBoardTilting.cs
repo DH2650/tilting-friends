@@ -37,7 +37,6 @@ public class VSBoard : MonoBehaviour
         {
             NetworkManager networkManager = networkManagerObject.GetComponent<NetworkManager>();
             players = networkManager.players;
-            Debug.Log("players:" + players);
         }
     }
 
@@ -45,7 +44,6 @@ public class VSBoard : MonoBehaviour
     {
         if (VSStarted)
         {
-            Debug.Log("board tag: " + board.tag);
             // Get positions of both players
             getPlayers();
             if (norm.x > platformRadius)
@@ -90,7 +88,6 @@ public class VSBoard : MonoBehaviour
             {
                 if (isBoard1)
                 {
-                    Debug.Log("board 1");
                     getMovement(player);
                     isBoard1 = false;
                 }
