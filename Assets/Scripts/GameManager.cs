@@ -16,6 +16,7 @@ public class GameManager : MonoBehaviour
     public float transitionTime = 1f;
 
     private int currentLevel = 0;
+    private int nextLevel = 0;
     private bool transitioning = false;
 
     private void Start()
@@ -35,11 +36,13 @@ public class GameManager : MonoBehaviour
 
     public void LevelUp()
     {
+        Debug.Log("entered levelup");
         if (transitioning || currentLevel >= boards.Length - 1)
             return;
 
         transitioning = true;
-        int nextLevel = currentLevel + 1;
+        Debug.Log("current level: " + currentLevel);
+        nextLevel = currentLevel + 1;
 
         // Activate next board and ball before transition
         boards[currentLevel].SetActive(false);
@@ -49,6 +52,12 @@ public class GameManager : MonoBehaviour
         balls[nextLevel].SetActive(true);
 
         currentLevel = nextLevel;
+        Debug.Log("after");
+        Debug.Log("next level: " + nextLevel);
+        Debug.Log("current level: " + currentLevel);
+        transitioning = false;
+
+
 
 //         StartCoroutine(MoveToNextBoard(nextLevel));
     }
