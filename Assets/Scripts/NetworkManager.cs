@@ -28,7 +28,17 @@ public class NetworkManager : MonoBehaviour
     private Transform cat;
     private Transform catBody;
     private Transform catTail;
+    private List<PendingPlayer> pendingPlayers = new List<PendingPlayer>();
+    private bool readyToSpawnPlayers = false;
+    // Add this field at the top of your NetworkManager or similar
+    public TextMeshProUGUI lobbyText;
+    private List<string> lobbyPlayers = new List<string>();
 
+    private class PendingPlayer
+    {
+        public string controllerId;
+        public string playerName;
+    }
     void Awake()
     {
         if (Instance == null)
@@ -46,7 +56,139 @@ public class NetworkManager : MonoBehaviour
     void Start()
     {
         ConnectToServer();
+        SceneManager.sceneLoaded += OnSceneLoaded;
     }
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        if (scene.name == "SurvivalMode")
+        {
+            readyToSpawnPlayers = true;
+
+            // Spawn all pending players now
+            foreach (var pending in pendingPlayers)
+            {
+                SpawnPlayer(pending.controllerId, pending.playerName);
+            }
+
+            pendingPlayers.Clear();
+        }
+        else if (scene.name == "VSMode")
+        {
+            readyToSpawnPlayers = true;
+            foreach (var pending in pendingPlayers)
+            {
+                SpawnPlayerVS(pending.controllerId, pending.playerName);
+            }
+
+        }
+        else
+        {
+            readyToSpawnPlayers = false;
+        }
+    }
+
+    private void SpawnPlayerVS(string controllerId, string playerName)
+    {
+        if (players.ContainsKey(controllerId) || playerPrefab == null)
+            return;
+
+
+        if (isBoard1)
+        {
+            board = GameObject.Find("Board1");
+            isBoard1 = false;
+        }
+        else
+        {
+            board = GameObject.Find("Board2");
+            isBoard1 = true;
+        }
+
+        GameObject newPlayer = Instantiate(playerPrefab, board.transform.position + spawnAdj, Quaternion.identity);
+        DontDestroyOnLoad(newPlayer);
+        cat = newPlayer.transform.GetChild(0);
+        catTail = cat.transform.GetChild(4);
+        catBody = cat.transform.GetChild(3);
+        catTail.GetComponent<Renderer>().material = playerMaterials[materialCount];
+        catBody.GetComponent<Renderer>().material = playerMaterials[materialCount];
+        if (materialCount < 5)
+        {
+            materialCount += 1;
+        }
+        else
+        {
+            materialCount = 0;
+        }
+        NetworkPlayerMovement ps = newPlayer.GetComponent<NetworkPlayerMovement>();
+        Rigidbody rb = newPlayer.GetComponent<Rigidbody>();
+        TextMeshProUGUI tmp = newPlayer.GetComponentInChildren<TextMeshProUGUI>();
+
+        if (tmp == null)
+        {
+            Debug.LogError("Couldn't find any TextMeshProUGUI component in children.");
+        }
+        else
+        {
+            tmp.text = playerName;
+            Debug.Log("Successfully set name to: " + playerName);
+        }
+
+        ps.Initialize(rb, playerName);
+
+        players.Add(controllerId, newPlayer);
+        Debug.Log("Spawned player: " + playerName);
+    }
+    private void SpawnPlayer(string controllerId, string playerName)
+    {
+        if (players.ContainsKey(controllerId) || playerPrefab == null)
+            return;
+
+        GameObject newPlayer = Instantiate(playerPrefab, playerPrefab.transform.position, Quaternion.identity);
+        DontDestroyOnLoad(newPlayer);
+        cat = newPlayer.transform.GetChild(0);
+        catTail = cat.transform.GetChild(4);
+        catBody = cat.transform.GetChild(3);
+        catTail.GetComponent<Renderer>().material = playerMaterials[materialCount];
+        catBody.GetComponent<Renderer>().material = playerMaterials[materialCount];
+        if (materialCount < 5)
+        {
+            materialCount += 1;
+        }
+        else
+        {
+            materialCount = 0;
+        }
+        NetworkPlayerMovement ps = newPlayer.GetComponent<NetworkPlayerMovement>();
+        Rigidbody rb = newPlayer.GetComponent<Rigidbody>();
+        TextMeshProUGUI tmp = newPlayer.GetComponentInChildren<TextMeshProUGUI>();
+
+        if (tmp != null)
+        {
+            tmp.text = playerName;
+            Debug.Log("Successfully set name to: " + playerName);
+        }
+
+        ps.Initialize(rb, playerName);
+
+        players.Add(controllerId, newPlayer);
+        Debug.Log("Spawned player: " + playerName);
+    }
+
+    public void TryUpdateLobbyUI()
+    {
+        // Only update if LobbyText exists in the scene and is active
+        GameObject lobbyTextGO = GameObject.Find("LobbyText");
+
+        if (lobbyTextGO != null && lobbyTextGO.activeInHierarchy)
+        {
+            TextMeshProUGUI tmp = lobbyTextGO.GetComponent<TextMeshProUGUI>();
+            if (tmp != null)
+            {
+                tmp.text = string.Join("\n", lobbyPlayers);
+            }
+        }
+    }
+
 
     void ConnectToServer()
     {
@@ -102,60 +244,29 @@ public class NetworkManager : MonoBehaviour
                         return;
                     }
 
-                    Debug.Log("Controller connected (player joined): " + controllerId);
-                    if (!players.ContainsKey(controllerId) && playerPrefab != null)
+                    Debug.Log("Controller connected (player joined): " + playerName);
+
+                    if (!lobbyPlayers.Contains(playerName))
                     {
-                        GameObject newPlayer = new GameObject();
-                        Scene scene = SceneManager.GetActiveScene();
-                        if (scene.name == "SurvivalMode")
-                        {
-                            newPlayer = Instantiate(playerPrefab, playerPrefab.transform.position, Quaternion.identity);
-                        }
-                        else if (scene.name == "VSMode")
-                        {
-                            if (isBoard1)
-                            {
-                                board = GameObject.Find("Board1");
-                                isBoard1 = false;
-                            }
-                            else
-                            {
-                                board = GameObject.Find("Board2");
-                                isBoard1 = true;
-                            }
-                            newPlayer = Instantiate(playerPrefab, board.transform.position + spawnAdj, Quaternion.identity);
-                        }
-
-                        cat = newPlayer.transform.GetChild(0);
-                        catTail = cat.transform.GetChild(4);
-                        catBody = cat.transform.GetChild(3);
-                        catTail.GetComponent<Renderer>().material = playerMaterials[materialCount];
-                        catBody.GetComponent<Renderer>().material = playerMaterials[materialCount];
-                        if (materialCount < 5){
-                            materialCount += 1; 
-                        }
-                        else {
-                            materialCount = 0;
-                        }
-
-                        NetworkPlayerMovement ps = newPlayer.GetComponent<NetworkPlayerMovement>();
-                        Rigidbody rb = newPlayer.GetComponent<Rigidbody>();
-                        TextMeshProUGUI tmp = newPlayer.GetComponentInChildren<TextMeshProUGUI>();
-
-                        if (tmp == null)
-                        {
-                            Debug.LogError("Couldn't find any TextMeshProUGUI component in children.");
-                        }
-                        else
-                        {
-                            tmp.text = playerName;
-                            Debug.Log("Successfully set name to: " + playerName);
-                        }
-                        ps.Initialize(rb, playerName);
-
-                        players.Add(controllerId, newPlayer);
-                        Debug.Log("Spawned player: " + playerName);
+                        lobbyPlayers.Add(playerName);
+                        TryUpdateLobbyUI(); // calls function we'll define
                     }
+
+
+                    if (readyToSpawnPlayers)
+                    {
+                        SpawnPlayer(controllerId, playerName);
+                    }
+                    else
+                    {
+                        // Save for later spawning
+                        pendingPlayers.Add(new PendingPlayer
+                        {
+                            controllerId = controllerId,
+                            playerName = playerName
+                        });
+                    }
+
                 }
                 catch (System.Exception ex)
                 {

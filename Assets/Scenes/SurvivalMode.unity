@@ -1233,7 +1233,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &872223121
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1252,12 +1252,18 @@ MonoBehaviour:
   isBoard1: 1
   spawnAdj: {x: 0, y: 2, z: 0}
   playerMaterials:
+<<<<<<< Updated upstream
   - {fileID: 2100000, guid: c02a17ecbe54d5945a36c99cba91caf8, type: 2}
   - {fileID: 2100000, guid: cbefd07bc5aa7ab40a79b0ab2e50e038, type: 2}
   - {fileID: 2100000, guid: a36143d2b82b8ee4ca1010da7e7804c5, type: 2}
   - {fileID: 2100000, guid: 2517e7a660b7af84cb37064216069217, type: 2}
   - {fileID: 2100000, guid: 1d8b673ddfc84534996e9bb151d35cd7, type: 2}
   - {fileID: 2100000, guid: 21f8d4cb8708eef4ba0e3e012dfc58d1, type: 2}
+=======
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+>>>>>>> Stashed changes
   debug: {fileID: 1887298640}
 --- !u!4 &872223122
 Transform:
@@ -1520,7 +1526,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &975865213
 MonoBehaviour:
   m_ObjectHideFlags: 0
