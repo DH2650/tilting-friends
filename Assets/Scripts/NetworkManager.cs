@@ -105,7 +105,39 @@ public class NetworkManager : MonoBehaviour
                     Debug.Log("Controller connected (player joined): " + controllerId);
                     if (!players.ContainsKey(controllerId) && playerPrefab != null)
                     {
-                        GameObject newPlayer = Instantiate(playerPrefab, playerPrefab.transform.position, Quaternion.identity);
+                        GameObject newPlayer = new GameObject();
+                        Scene scene = SceneManager.GetActiveScene();
+                        if (scene.name == "SurvivalMode")
+                        {
+                            newPlayer = Instantiate(playerPrefab, playerPrefab.transform.position, Quaternion.identity);
+                        }
+                        else if (scene.name == "VSMode")
+                        {
+                            if (isBoard1)
+                            {
+                                board = GameObject.Find("Board1");
+                                isBoard1 = false;
+                            }
+                            else
+                            {
+                                board = GameObject.Find("Board2");
+                                isBoard1 = true;
+                            }
+                            newPlayer = Instantiate(playerPrefab, board.transform.position + spawnAdj, Quaternion.identity);
+                        }
+
+                        cat = newPlayer.transform.GetChild(0);
+                        catTail = cat.transform.GetChild(4);
+                        catBody = cat.transform.GetChild(3);
+                        catTail.GetComponent<Renderer>().material = playerMaterials[materialCount];
+                        catBody.GetComponent<Renderer>().material = playerMaterials[materialCount];
+                        if (materialCount < 5){
+                            materialCount += 1; 
+                        }
+                        else {
+                            materialCount = 0;
+                        }
+
                         NetworkPlayerMovement ps = newPlayer.GetComponent<NetworkPlayerMovement>();
                         Rigidbody rb = newPlayer.GetComponent<Rigidbody>();
                         TextMeshProUGUI tmp = newPlayer.GetComponentInChildren<TextMeshProUGUI>();
