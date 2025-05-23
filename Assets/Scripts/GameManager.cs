@@ -100,7 +100,25 @@ public class GameManager : MonoBehaviour
             return;
         else if (currentLevel >= boards.Length - 1)
         {
-            Debug.Log("Game won!");
+            Scene scene = SceneManager.GetActiveScene();
+            if (scene.name == "VSMode")
+            {
+                if (boards[currentLevel].tag == "Board1")
+                {
+                    Debug.Log("Left team won!");
+                }
+                else
+                {
+                    Debug.Log("Right team won!");
+                }
+            }
+            else
+            {
+                Debug.Log("Game won!");
+            }
+            
+            
+            
             //ADD GAME WON HERE
         }
         else
@@ -115,7 +133,7 @@ public class GameManager : MonoBehaviour
             LoadLevel(nextLevel);
             boards[nextLevel].SetActive(true);
             balls[nextLevel].SetActive(true);
-            balls[nextLevel].transform.position += new Vector3(3.0f, 0f, 0f);;
+            balls[nextLevel].transform.position += new Vector3(3.0f, 0f, 0f); ;
             currentLevel = nextLevel;
             transitioning = false;
         }

@@ -2148,6 +2148,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 961271723849024039, guid: 0b2200e96167d48d3a5932dbcc4e64fe, type: 3}
+      propertyPath: m_TagString
+      value: Board1
+      objectReference: {fileID: 0}
     - target: {fileID: 1332529554850045538, guid: 0b2200e96167d48d3a5932dbcc4e64fe, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.044005007
@@ -2566,6 +2570,10 @@ PrefabInstance:
     - target: {fileID: 961271723849024039, guid: 0b2200e96167d48d3a5932dbcc4e64fe, type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 961271723849024039, guid: 0b2200e96167d48d3a5932dbcc4e64fe, type: 3}
+      propertyPath: m_TagString
+      value: Board2
       objectReference: {fileID: 0}
     - target: {fileID: 1332529554850045538, guid: 0b2200e96167d48d3a5932dbcc4e64fe, type: 3}
       propertyPath: m_LocalScale.x
