@@ -35,8 +35,8 @@ public class SceneController : MonoBehaviour
     public void StartVS()
     {
         Debug.Log("Start");
-        board1.clickStart();
-        board2.clickStart();
+        //board1.clickStart();
+        //board2.clickStart();
 
     }
 }

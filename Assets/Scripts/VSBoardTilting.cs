@@ -13,11 +13,11 @@ public class VSBoard : MonoBehaviour
     public Vector3 respawnPosition = new Vector3(0, 5.0f, 0);
     private bool isBoard1 = true;
     private bool isBoard2 = false;
-    private bool VSStarted = false;
+    private bool VSStarted = true;
 
     [SerializeField] DebugOverlay debug;
     [SerializeField] Rigidbody board;
-    [SerializeField] GameObject player;
+    //[SerializeField] GameObject player;
 
     public GameObject networkManagerObject;
     public Dictionary<string, GameObject> players;
@@ -137,8 +137,10 @@ public class VSBoard : MonoBehaviour
         player.transform.position = board.transform.position + respawnPosition;
     }
 
+    /*
     public void clickStart()
     {
+        Debug.Log("players: " + players);
         if (players.Count < 2)
         {
             Debug.Log("Not enough players to launch");
@@ -148,4 +150,5 @@ public class VSBoard : MonoBehaviour
             VSStarted = true;
         }
     }
+    */
 }

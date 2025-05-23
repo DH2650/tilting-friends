@@ -95,12 +95,12 @@ public class NetworkManager : MonoBehaviour
 
         if (isBoard1)
         {
-            board = GameObject.Find("Board1");
+            board = GameObject.Find("ChangingWorld1");
             isBoard1 = false;
         }
         else
         {
-            board = GameObject.Find("Board2");
+            board = GameObject.Find("ChangingWorld2");
             isBoard1 = true;
         }
 
