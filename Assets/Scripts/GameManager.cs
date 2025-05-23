@@ -15,6 +15,13 @@ public class GameManager : MonoBehaviour
     [Header("Transition Settings")]
     public float transitionTime = 1f;
 
+    [Header("Environment Settings")]
+    public Material cloudySkybox;
+    public Material nightSkybox;
+    public Material snowySkybox;
+    public Material sunnySkybox;
+
+
     private int currentLevel = 0;
     private int nextLevel = 0;
     private bool transitioning = false;
@@ -34,6 +41,33 @@ public class GameManager : MonoBehaviour
 
     }
 
+    public void LoadLevel(int level)
+    {
+
+
+        // Switch skybox
+        switch (level)
+        {
+            case 0:
+                RenderSettings.skybox = sunnySkybox;
+                break;
+            case 1:
+                RenderSettings.skybox = cloudySkybox;
+                break;
+            case 2:
+                RenderSettings.skybox = nightSkybox;
+                break;
+            case 3:
+                RenderSettings.skybox = snowySkybox;
+                break;
+            default:
+                Debug.LogWarning("No skybox defined for this level.");
+                break;
+        }
+
+        // Update lighting
+        DynamicGI.UpdateEnvironment();
+    }
     public void LevelUp()
     {
         Debug.Log("entered levelup");
@@ -48,6 +82,7 @@ public class GameManager : MonoBehaviour
         boards[currentLevel].SetActive(false);
         balls[currentLevel].SetActive(false);
 
+        LoadLevel(nextLevel);
         boards[nextLevel].SetActive(true);
         balls[nextLevel].SetActive(true);
 
