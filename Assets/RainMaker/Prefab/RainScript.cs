@@ -60,6 +60,15 @@ namespace DigitalRuby.RainMaker
         protected override void Start()
         {
             base.Start();
+            if (RainFallParticleSystem != null && !RainFallParticleSystem.isPlaying)
+            {
+                RainFallParticleSystem.Play();
+            }
+
+            if (RainMistParticleSystem != null && !RainMistParticleSystem.isPlaying)
+            {
+                RainMistParticleSystem.Play();
+            }
         }
 
         protected override void Update()
