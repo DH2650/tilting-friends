@@ -289,10 +289,13 @@ public class NetworkManager : MonoBehaviour
             int start = json.IndexOf(find);
             int start_len = start + find.Length + 2;
             Debug.Log($"Start Index: {start_len}");
-            string first_sub= json.Substring(start_len, json.Length - start_len);
+            string first_sub = json.Substring(start_len, json.Length - start_len);
             Debug.Log($"input: {first_sub}");
+            int end = first_sub.IndexOf('"');
+            string final = first_sub.Substring(0, end - 1);
+            Debug.Log($"final: {final}");
 
-            return first_sub;
+            return final;
         }
 
     void updatePlayerDebugInfo() {

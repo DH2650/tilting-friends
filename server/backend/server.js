@@ -63,7 +63,7 @@ io.on('connection', (socket) => {
         // console.log('Receive gyro');
         if (unitySocket && playerId) {
             // console.log(`Input from controller ${socket.id} (alpha: ${data.alpha} - beta: ${data.beta} - gamma: ${data.gamma}):`);
-            unitySocket.emit('gyroData', { controllerId: socket.id, alpha: data.alpha, beta: data.beta, gamma: data.gamma});
+            unitySocket.emit('gyroData', { controllerId: socket.id, alpha: data.alpha, beta: data.beta, gamma: data.gamma, test: "test"});
         }
     });
 
