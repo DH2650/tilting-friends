@@ -206,30 +206,32 @@ public class NetworkManager : MonoBehaviour
                         {
                             string controllerId = GetField(response.ToString(), "controllerId");
 
-//                             string alpha = GetFieldGyro(response.ToString(), "alpha"); // Z-axis
-//                             string beta = GetInputGyro(response.ToString(), "beta"); // X-axis
-//                             string gamma = GetInputGyro(response.ToString(), "gamma"); // Y-axis
+                            string alpha = GetInputGyro(response.ToString(), "alpha"); // Z-axis
+                            string beta = GetInputGyro(response.ToString(), "beta"); // X-axis
+                            string gamma = GetInputGyro(response.ToString(), "gamma"); // Y-axis
 
-                            string alpha = GetField(response.ToString(), "alpha"); // Z-axis
-                            string beta = GetInput(response.ToString(), "beta"); // X-axis
-                            string gamma = GetInput(response.ToString(), "gamma"); // Y-axis
-
-                            if (string.IsNullOrEmpty(controllerId))
-                            {
-                                Debug.LogError("Received invalid or null playerId for inputFromController.");
-                                Debug.Log($"No controllerId: {response.ToString()}");
-                                return;
-                            }
-                            // rawInput might be null if not present, handle accordingly.
-
-                            if (players.ContainsKey(controllerId))
-                            {
-        //                         Debug.Log($"Received input '{response.ToString() ?? "null"}' for player '{controllerId}'");
-
-                                GameObject playerObject = players[controllerId];
-//                                 playerObject.GetComponent<NetworkPlayerMovement>()?.ProcessInput(rawInput);
-                                Debug.Log($"Alpha: {alpha} - Beta {beta} - Gamma: {gamma}");
-                            }
+//                             string alpha = GetField(response.ToString(), "alpha"); // Z-axis
+//                             string beta = GetInput(response.ToString(), "beta"); // X-axis
+//                             string gamma = GetInput(response.ToString(), "gamma"); // Y-axis
+//
+//                             Debug.Log($"Alpha: {alpha} - Beta {beta} - Gamma: {gamma}");
+//
+//                             if (string.IsNullOrEmpty(controllerId))
+//                             {
+//                                 Debug.LogError("Received invalid or null playerId for inputFromController.");
+//                                 Debug.Log($"No controllerId: {response.ToString()}");
+//                                 return;
+//                             }
+//                             // rawInput might be null if not present, handle accordingly.
+//
+//                             if (players.ContainsKey(controllerId))
+//                             {
+//         //                         Debug.Log($"Received input '{response.ToString() ?? "null"}' for player '{controllerId}'");
+//
+//                                 GameObject playerObject = players[controllerId];
+// //                                 playerObject.GetComponent<NetworkPlayerMovement>()?.ProcessInput(rawInput);
+//                                 Debug.Log($"Alpha: {alpha} - Beta {beta} - Gamma: {gamma}");
+//                             }
                         }
                         catch (System.Exception ex)
                         {
@@ -281,19 +283,17 @@ public class NetworkManager : MonoBehaviour
         return controllerId;
     }
 
-//         string GetInputGyro(string json, string find)
-//         {
-//     //         Debug.Log($"JSON string: {json}");
-//             int start = json.IndexOf(find);
-//     //         Debug.Log($"Start Index: {start + find.Length + 3}");
-//             int end = json.LastIndexOf('"');
-//     //         Debug.Log($"End Index: {end}");
-//     //         Debug.Log($"Diff: {end - (start + find.Length + 3)}");
-//             string gyro = json.Substring(start + find.Length + 3, end - (start + find.Length + 3));
-//     //         Debug.Log($"input: {controllerId}");
-//
-//             return controllerId;
-//         }
+        string GetInputGyro(string json, string find)
+        {
+            Debug.Log($"JSON string: {json}");
+            int start = json.IndexOf(find);
+            int start_len = start + find.Length + 2;
+            Debug.Log($"Start Index: {start_len}");
+            string first_sub= json.Substring(start_len, json.Length - start_len);
+            Debug.Log($"input: {first_sub}");
+
+            return first_sub;
+        }
 
     void updatePlayerDebugInfo() {
         string msg = "";
