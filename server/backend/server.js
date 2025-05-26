@@ -45,14 +45,25 @@ io.on('connection', (socket) => {
     });
 
     // Handle input from a web controller
-    socket.on('controllerInput', (data) => {
+    // socket.on('controllerInput', (data) => {
+    //     // data should contain { playerId: "...", input: "..." }
+    //     // Or, if using socket.id as controllerId directly: { input: "..." }
+    //     const playerId = playerControllers[socket.id];
+    //     console.log('Receive input');
+    //     if (unitySocket && playerId) {
+    //         console.log(`Input from controller ${socket.id} (Player ${playerId}):`, data.input);
+    //         unitySocket.emit('controllerInput', { controllerId: socket.id, input: data.input });
+    //     }
+    // });
+
+    socket.on('gyroData', (data) => {
         // data should contain { playerId: "...", input: "..." }
         // Or, if using socket.id as controllerId directly: { input: "..." }
         const playerId = playerControllers[socket.id];
-        console.log('Receive input');
+        console.log('Receive gyro');
         if (unitySocket && playerId) {
-            console.log(`Input from controller ${socket.id} (Player ${playerId}):`, data.input);
-            unitySocket.emit('controllerInput', { controllerId: socket.id, input: data.input });
+            console.log(`Input from controller ${socket.id} (alpha: ${data.alpha} - beta: ${data.beta} - gamma: ${data.gamma}):`);
+            unitySocket.emit('gyroData', { controllerId: socket.id, alpha: data.alpha, beta: data.beta, gamma: data.gamma});
         }
     });
 
