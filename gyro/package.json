@@ -1,0 +1,21 @@
+{
+  "name": "gyro-server",
+  "version": "1.0.0",
+  "description": "A simple Node.js server for a gyroscope frontend.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": [
+    "node",
+    "express",
+    "gyroscope",
+    "mobile"
+  ],
+  "author": "Gemini",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
+
