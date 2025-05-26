@@ -198,6 +198,47 @@ public class NetworkManager : MonoBehaviour
             });
         });
 
+        socket.On("gyroData", (response) =>
+                {
+                    // CRITICAL: Any interaction with player GameObjects MUST execute on the main thread.
+                    MainThread.wkr.AddJob(() => {
+                        try
+                        {
+                            string controllerId = GetField(response.ToString(), "controllerId");
+
+//                             string alpha = GetFieldGyro(response.ToString(), "alpha"); // Z-axis
+//                             string beta = GetInputGyro(response.ToString(), "beta"); // X-axis
+//                             string gamma = GetInputGyro(response.ToString(), "gamma"); // Y-axis
+
+                            string alpha = GetField(response.ToString(), "alpha"); // Z-axis
+                            string beta = GetInput(response.ToString(), "beta"); // X-axis
+                            string gamma = GetInput(response.ToString(), "gamma"); // Y-axis
+
+                            if (string.IsNullOrEmpty(controllerId))
+                            {
+                                Debug.LogError("Received invalid or null playerId for inputFromController.");
+                                Debug.Log($"No controllerId: {response.ToString()}");
+                                return;
+                            }
+                            // rawInput might be null if not present, handle accordingly.
+
+                            if (players.ContainsKey(controllerId))
+                            {
+        //                         Debug.Log($"Received input '{response.ToString() ?? "null"}' for player '{controllerId}'");
+
+                                GameObject playerObject = players[controllerId];
+//                                 playerObject.GetComponent<NetworkPlayerMovement>()?.ProcessInput(rawInput);
+                                Debug.Log($"Alpha: {alpha} - Beta {beta} - Gamma: {gamma}");
+                            }
+                        }
+                        catch (System.Exception ex)
+                        {
+                            Debug.LogError($"Error processing controllerInput event: {ex.Message}. Ensure this runs on the main thread if using Unity API.");
+                            Debug.Log($"Error processing controllerInput event: {ex.Message}");
+                        }
+                    });
+                });
+
         Debug.Log("Attempting to connect to server at " + serverURL);
         socket.Connect();
     }
@@ -239,6 +280,20 @@ public class NetworkManager : MonoBehaviour
 
         return controllerId;
     }
+
+        string GetInputGyro(string json, string find)
+        {
+    //         Debug.Log($"JSON string: {json}");
+            int start = json.IndexOf(find);
+    //         Debug.Log($"Start Index: {start + find.Length + 3}");
+            int end = json.LastIndexOf('"');
+    //         Debug.Log($"End Index: {end}");
+    //         Debug.Log($"Diff: {end - (start + find.Length + 3)}");
+            string gyro = json.Substring(start + find.Length + 3, end - (start + find.Length + 3));
+    //         Debug.Log($"input: {controllerId}");
+
+            return controllerId;
+        }
 
     void updatePlayerDebugInfo() {
         string msg = "";

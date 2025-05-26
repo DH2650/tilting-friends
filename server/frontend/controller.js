@@ -126,6 +126,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (now - lastGyroSendTime > GYRO_SEND_INTERVAL) {
             if (socket.connected && assignedPlayerId) { // Ensure connection and registration
                 socket.emit('gyroData', {
+                    controllerId: controllerIdDisplay,
                     alpha: currentAlpha,
                     beta: currentBeta,
                     gamma: currentGamma
