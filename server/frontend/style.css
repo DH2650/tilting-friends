@@ -69,7 +69,7 @@ body {
     background-color: #3182ce;
 }
 
-/* Controls Section (Buttons) */
+/* Controls Section (Buttons) - KEPT FOR REFERENCE BUT NOT USED IN NEW HTML */
 .controls {
     display: flex;
     flex-direction: column;

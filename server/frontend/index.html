@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Unity Web Controller</title>
+    <title>Unity Web Gyro Controller</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -18,7 +18,7 @@
 
 <div class="gyro-container">
     <h2 class="section-title">Gyroscope Data</h2>
-    <p class="section-description">Move your device to see the values change.</p>
+    <p class="section-description">Move your device to control.</p>
 
     <button id="requestPermission" class="permission-button hidden">
         Enable Gyroscope
@@ -41,18 +41,6 @@
         </div>
     </div>
 </div>
-<div id="controls" class="controls" style="display: none;">
-    <button id="buttonUp">Up</button>
-
-    <div class="horizontal-buttons">
-        <button id="buttonLeft">Left</button>
-        <button id="buttonRight">Right</button>
-    </div>
-    <button id="buttonDown">Down</button>
-
-    <button id="buttonActionA" class="action-button">Action A</button>
-</div>
-
 <script src="/socket.io/socket.io.js"></script>
 <script src="controller.js"></script>
 </body>

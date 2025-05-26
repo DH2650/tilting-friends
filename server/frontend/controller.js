@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const connectionStatus = document.getElementById('connectionStatus');
     const controllerIdDisplay = document.getElementById('controllerIdDisplay');
     const playerIdDisplay = document.getElementById('playerIdDisplay');
-    const controlsDiv = document.getElementById('controls');
+    // const controlsDiv = document.getElementById('controls'); // Removed
     const roomCodeInputDiv = document.getElementById('roomCodeInput');
     const playerIdInput = document.getElementById('playerIdInput');
     const joinGameButton = document.getElementById('joinGameButton');
@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
     socket.on('unityGameDisconnected', () => {
         connectionStatus.textContent = 'Unity Game Disconnected. Please wait.';
         connectionStatus.classList.add('error');
-        controlsDiv.style.display = 'none';
+        // controlsDiv.style.display = 'none'; // Removed
         roomCodeInputDiv.style.display = 'block'; // Allow re-joining
         // Stop gyro data if unity game disconnects
         if (gyroDataActive) {
@@ -64,9 +64,9 @@ document.addEventListener('DOMContentLoaded', () => {
     socket.on('controllerRegistered', (data) => {
         assignedPlayerId = data.assignedPlayerId;
         playerIdDisplay.textContent = `Assigned Player ID: ${assignedPlayerId}`;
-        controlsDiv.style.display = 'block';
+        // controlsDiv.style.display = 'block'; // Removed
         roomCodeInputDiv.style.display = 'none';
-        connectionStatus.textContent = 'Controller Registered. You can now play!';
+        connectionStatus.textContent = 'Controller Registered. You can now control via gyroscope!';
         connectionStatus.classList.remove('error');
         connectionStatus.classList.add('info');
         hideMessageBox(); // Hide any general messages
@@ -79,7 +79,7 @@ document.addEventListener('DOMContentLoaded', () => {
     socket.on('disconnect', () => {
         connectionStatus.textContent = 'Disconnected from server.';
         connectionStatus.classList.add('error');
-        controlsDiv.style.display = 'none';
+        // controlsDiv.style.display = 'none'; // Removed
         roomCodeInputDiv.style.display = 'block';
         if (gyroDataActive) {
             window.removeEventListener('deviceorientation', handleDeviceOrientation);
@@ -91,29 +91,6 @@ document.addEventListener('DOMContentLoaded', () => {
         connectionStatus.textContent = `Error: ${data.message}`;
         connectionStatus.classList.add('error');
     });
-
-    // --- Button Input Handling ---
-    document.getElementById('buttonUp').addEventListener('pointerdown', () => sendInput('up_pressed'));
-    document.getElementById('buttonUp').addEventListener('pointerup', () => sendInput('up_released'));
-    document.getElementById('buttonDown').addEventListener('pointerdown', () => sendInput('down_pressed'));
-    document.getElementById('buttonDown').addEventListener('pointerup', () => sendInput('down_released'));
-    document.getElementById('buttonLeft').addEventListener('pointerdown', () => sendInput('left_pressed'));
-    document.getElementById('buttonLeft').addEventListener('pointerup', () => sendInput('left_released'));
-    document.getElementById('buttonRight').addEventListener('pointerdown', () => sendInput('right_pressed'));
-    document.getElementById('buttonRight').addEventListener('pointerup', () => sendInput('right_released'));
-
-    // Ensure buttonActionA exists in your index.html
-    const buttonActionA = document.getElementById('buttonActionA');
-    if (buttonActionA) {
-        buttonActionA.addEventListener('pointerdown', () => sendInput('actionA_pressed'));
-        buttonActionA.addEventListener('pointerup', () => sendInput('actionA_released'));
-    }
-
-    function sendInput(inputType) {
-        if (socket.connected && assignedPlayerId) {
-            socket.emit('controllerInput', { input: inputType });
-        }
-    }
 
     // --- Gyroscope Functionality ---
 
@@ -211,9 +188,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Call setupGyroscope when the DOM is fully loaded, but before player registration.
-    // The actual permission request will still be tied to the button click.
-    // It will then be re-called after 'controllerRegistered' to ensure UI updates.
+    // Call setupGyroscope when the DOM is fully loaded.
     setupGyroscope();
 
 });
