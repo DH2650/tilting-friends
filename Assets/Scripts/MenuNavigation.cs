@@ -35,14 +35,23 @@ public class MenuNavigation : MonoBehaviour
     }
     public void OnSurvivalModeClicked()
     {
+        NetworkManager nm = Object.FindFirstObjectByType<NetworkManager>();
+  
         mainMenuParent.SetActive(false);
         lobbyNewParentSMode.SetActive(true);
+        nm.ClearLobbyUI();
+        nm.ClearLobbyPlayers();
+        nm.ClearPendingPlayers();
     }
 
     public void OnVSModeClicked()
     {
+        NetworkManager nm = Object.FindFirstObjectByType<NetworkManager>();
         mainMenuParent.SetActive(false);
         lobbyNewParentVsMode.SetActive(true);
+        nm.ClearLobbyUI();
+        nm.ClearLobbyPlayers();
+        nm.ClearPendingPlayers();
     }
 
     // Add this for the START button in lobby

@@ -53,6 +53,17 @@ public class NetworkManager : MonoBehaviour
         }
     }
 
+    public void ClearLobbyPlayers()
+    {
+        lobbyPlayers.Clear();
+    }
+
+
+    public void ClearPendingPlayers()
+    {
+        pendingPlayers.Clear();
+    }
+
     void Start()
     {
         ConnectToServer();
@@ -185,6 +196,21 @@ public class NetworkManager : MonoBehaviour
             if (tmp != null)
             {
                 tmp.text = string.Join("\n", lobbyPlayers);
+            }
+        }
+    }
+
+    public void ClearLobbyUI()
+    {
+        // Only clear if LobbyText exists in the scene and is active
+        GameObject lobbyTextGO = GameObject.Find("LobbyText");
+
+        if (lobbyTextGO != null && lobbyTextGO.activeInHierarchy)
+        {
+            TextMeshProUGUI tmp = lobbyTextGO.GetComponent<TextMeshProUGUI>();
+            if (tmp != null)
+            {
+                tmp.text = ""; // Clear the text
             }
         }
     }

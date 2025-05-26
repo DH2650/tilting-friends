@@ -20,9 +20,12 @@ public class SceneController : MonoBehaviour
 
     public void VSQuit()
     {
+        Debug.Log("Game is exiting...");
         networkManagerObject = GameObject.FindGameObjectWithTag("NetworkManager");
         NetworkManager networkManager = networkManagerObject.GetComponent<NetworkManager>();
         networkManager.players.Clear();
+        networkManager.ClearPendingPlayers();
+        Debug.Log("Game is exited");
 
         SceneManager.LoadScene("MainMenu");
     }
