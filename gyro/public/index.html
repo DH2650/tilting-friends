@@ -74,6 +74,11 @@
       text-align: left;
       display: none; /* Hidden by default */
     }
+    .message-box.error {
+      background-color: #f8d7da; /* Light red background */
+      border-color: #f5c6cb; /* Red border */
+      color: #721c24; /* Dark red text */
+    }
   </style>
 </head>
 <body>
@@ -114,8 +119,8 @@
   // Function to display messages in the custom message box
   function showMessage(message, type = 'info') {
     messageBox.textContent = message;
+    messageBox.className = 'message-box ' + type; // Add type class for styling
     messageBox.style.display = 'block';
-    // You could add different styling based on 'type' (e.g., 'error', 'success')
   }
 
   // Function to hide the message box
@@ -141,8 +146,9 @@
     if (window.DeviceOrientationEvent) {
       // For iOS 13+ and some other browsers, explicit permission is required
       if (typeof DeviceOrientationEvent.requestPermission === 'function') {
-        // Show the permission request button
+        // Show the permission request button as it's needed for iOS 13+
         requestPermissionButton.classList.remove('hidden');
+
         requestPermissionButton.onclick = () => {
           DeviceOrientationEvent.requestPermission()
                   .then(permissionState => {
@@ -153,21 +159,31 @@
                       hideMessageBox(); // Hide any previous messages
                     } else {
                       // Permission denied
-                      showMessage('Permission to access gyroscope was denied. Please allow it in your device settings.', 'error');
+                      showMessage(
+                              'Permission to access device motion was denied. ' +
+                              'On iOS, this often requires the page to be served over HTTPS. ' +
+                              'If you are already on HTTPS, check your iPhone Settings > Safari > Motion & Orientation Access.',
+                              'error'
+                      );
                     }
                   })
                   .catch(error => {
                     console.error("Error requesting device orientation permission:", error);
-                    showMessage('Error requesting permission: ' + error.message, 'error');
+                    showMessage(
+                            'An error occurred while requesting permission: ' + error.message + '. ' +
+                            'On iOS, this typically means the page is NOT served over HTTPS. ' +
+                            'Please ensure you are using a secure connection (HTTPS).',
+                            'error'
+                    );
                   });
         };
       } else {
-        // No explicit permission required (older iOS, Android, desktop browsers)
+        // No explicit permission required (Android, desktop, older iOS)
         window.addEventListener('deviceorientation', handleDeviceOrientation);
         showMessage('Gyroscope data is being streamed. Move your device!', 'info');
       }
     } else {
-      // DeviceOrientationEvent is not supported
+      // DeviceOrientationEvent is not supported at all
       showMessage('Your browser does not support Device Orientation events. Gyroscope data cannot be accessed.', 'error');
     }
   }
