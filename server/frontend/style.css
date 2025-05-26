@@ -1,26 +1,206 @@
-body { 
-    font-family: Arial, sans-serif; 
-    text-align: center; 
-    margin-top: 20px; 
-    background-image: url("sky.jpg");
-    background-size: cover;
-    background-repeat: no-repeat;
+/* style.css */
 
-}
-
-#controls button {
-    padding: 20px;
-    margin: 10px;
-    font-size: 18px;
-    min-width: 100px;
-    border-radius: 30px;
-
-
-}
-
-.controls {
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start; /* Align content to the top */
     align-items: center;
-    margin-top: 200px;
+    min-height: 100vh;
+    background-color: #f0f4f8;
+    color: #333;
+    padding: 1rem;
+    box-sizing: border-box;
+    margin: 0;
+    -webkit-tap-highlight-color: transparent; /* Prevent tap highlight on mobile */
 }
 
-/* Add more styles for better UX, especially for touch devices */
+.status-message {
+    background-color: #e2e8f0;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    margin-bottom: 0.5rem;
+    width: 90%;
+    max-width: 400px;
+    text-align: center;
+    font-size: 0.9rem;
+    color: #4a5568;
+}
+
+.status-message.info {
+    background-color: #d1ecf1;
+    color: #0c5460;
+    border: 1px solid #bee5eb;
+}
+
+.input-section {
+    background-color: #ffffff;
+    border-radius: 1rem;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+    padding: 1.5rem;
+    max-width: 90%;
+    width: 400px;
+    text-align: center;
+    margin-top: 1rem;
+}
+
+.input-section input[type="text"] {
+    width: calc(100% - 20px);
+    padding: 0.8rem;
+    margin-bottom: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+}
+
+.input-section button {
+    background-color: #4299e1;
+    color: white;
+    padding: 0.8rem 1.5rem;
+    border-radius: 0.5rem;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 600;
+    transition: background-color 0.3s ease;
+}
+
+.input-section button:hover {
+    background-color: #3182ce;
+}
+
+/* Controls Section (Buttons) */
+.controls {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-top: 2rem;
+    padding: 1rem;
+    background-color: #ffffff;
+    border-radius: 1.5rem;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    max-width: 90%;
+    width: 400px;
+}
+
+.controls button {
+    background-color: #63b3ed; /* Light blue */
+    color: white;
+    padding: 1.5rem;
+    border-radius: 1rem;
+    border: none;
+    cursor: pointer;
+    font-size: 1.5rem;
+    font-weight: bold;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+    flex-grow: 1; /* Allow buttons to grow */
+    box-sizing: border-box;
+}
+
+.controls button:active {
+    background-color: #4299e1; /* Darker blue on active */
+    transform: scale(0.98);
+}
+
+.horizontal-buttons {
+    display: flex;
+    gap: 1rem;
+    width: 100%;
+}
+
+/* Gyroscope Section Styling */
+.gyro-container {
+    background-color: #ffffff;
+    border-radius: 1.5rem;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    padding: 1.5rem;
+    max-width: 90%;
+    width: 400px;
+    text-align: center;
+    margin-top: 1.5rem;
+}
+
+.section-title {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #4a5568;
+    margin-bottom: 0.5rem;
+}
+
+.section-description {
+    font-size: 0.9rem;
+    color: #718096;
+    margin-bottom: 1rem;
+}
+
+.data-display {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-top: 1.25rem;
+}
+
+.data-item {
+    background-color: #e2e8f0;
+    padding: 0.6rem 1rem;
+    border-radius: 0.75rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1rem;
+    font-weight: 500;
+    color: #2d3748;
+}
+.value {
+    font-weight: 700;
+    color: #4299e1;
+    min-width: 60px; /* Ensure consistent width for values */
+    text-align: right;
+}
+
+.permission-button {
+    background-color: #48bb78; /* Green button */
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.75rem;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 600;
+    margin-top: 1rem;
+    transition: background-color 0.3s ease;
+}
+.permission-button:hover {
+    background-color: #38a169; /* Darker green on hover */
+}
+.permission-button.hidden {
+    display: none;
+}
+
+.message-box {
+    background-color: #fff3cd;
+    border: 1px solid #ffeeba;
+    color: #856404;
+    padding: 0.8rem;
+    border-radius: 0.5rem;
+    margin-top: 0.8rem;
+    text-align: left;
+    font-size: 0.9rem;
+    display: none;
+}
+.message-box.error {
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+    color: #721c24;
+}
+.message-box.info {
+    background-color: #d1ecf1;
+    border-color: #bee5eb;
+    color: #0c5460;
+}
+.action-button {
+    background-color: #ed8936 !important; /* Orange */
+}
+.action-button:active {
+    background-color: #dd6b20 !important;
+}
